@@ -157,7 +157,7 @@ Last Updated: ${new Date().toLocaleDateString()}
             </button>
           </form>
           <p className="mt-4 text-center text-sm text-white">
-            Don't have an account?{' '}
+            Do not have an account?{' '}
             <Link href="/signup" className="text-yellow-500 hover:text-yellow-600">
               Sign up
             </Link>
