@@ -38,21 +38,13 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Legal</h4>
             <ul className="space-y-2">
-              <li>
-                <Link href="/privacy" className="text-gray-300 hover:text-yellow-500 transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
+
               <li>
                 <Link href="/terms" className="text-gray-300 hover:text-yellow-500 transition-colors">
                   Terms of Service
                 </Link>
               </li>
-              <li>
-                <Link href="/disclaimer" className="text-gray-300 hover:text-yellow-500 transition-colors">
-                  Disclaimer
-                </Link>
-              </li>
+
             </ul>
           </div>
         </div>
