@@ -53,6 +53,23 @@ export default function DashboardPage() {
     { symbol: 'META', price: 485.96, change: -2.15, changePercent: -0.44 },
   ]);
 
+  const [recentEarnings, setRecentEarnings] = useState([
+    { name: 'Alex M.', amount: 1250, time: '2 mins ago', type: 'Stocks' },
+    { name: 'Sarah K.', amount: 875, time: '5 mins ago', type: 'Crypto' },
+    { name: 'James L.', amount: 2100, time: '8 mins ago', type: 'Real Estate' },
+    { name: 'Emma R.', amount: 450, time: '12 mins ago', type: 'Forex' },
+    { name: 'Michael T.', amount: 1680, time: '15 mins ago', type: 'Commodities' },
+  ]);
+
+  const [currentEarningIndex, setCurrentEarningIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const names = [
+    'Alex', 'Sarah', 'James', 'Emma', 'Michael', 'David', 'Lisa', 'John', 'Anna', 'Robert',
+    'William', 'Elizabeth', 'Thomas', 'Jennifer', 'Charles', 'Susan', 'Joseph', 'Margaret', 'Daniel', 'Karen',
+    'Matthew', 'Nancy', 'Anthony', 'Betty', 'Mark', 'Sandra', 'Donald', 'Ashley', 'Steven', 'Kimberly'
+  ];
+
   const [transactions] = useState([
     { type: 'Deposit', amount: 50000, date: 'Jan 15, 2024', status: 'Completed', source: 'Coinbase' },
     { type: 'Investment', amount: -200000, date: 'Jan 10, 2024', status: 'Completed', source: 'Tesla' },
@@ -73,7 +90,7 @@ export default function DashboardPage() {
     }
 
     // Simulate live stock price changes
-    const interval = setInterval(() => {
+    const stockInterval = setInterval(() => {
       setStocks(prevStocks => 
         prevStocks.map(stock => {
           const randomChange = (Math.random() - 0.5) * 2;
@@ -90,8 +107,20 @@ export default function DashboardPage() {
       );
     }, 3000);
 
-    return () => clearInterval(interval);
-  }, [router]);
+    // Simulate new earnings with transitions
+    const earningsInterval = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentEarningIndex(prev => (prev + 1) % recentEarnings.length);
+        setIsTransitioning(false);
+      }, 500);
+    }, 2000);
+
+    return () => {
+      clearInterval(stockInterval);
+      clearInterval(earningsInterval);
+    };
+  }, [router, recentEarnings.length]);
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
@@ -267,6 +296,22 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Recent Earnings Ticker */}
+      <div className="fixed top-16 md:relative md:top-28 left-0 right-0 z-40 backdrop-blur-sm py-2 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-center">
+            <div className={`flex items-center space-x-2 transition-all duration-500 transform ${
+              isTransitioning ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'
+            }`}>
+              <span className="text-white font-semibold">{recentEarnings[currentEarningIndex].name}</span>
+              <span className="text-green-500">+${recentEarnings[currentEarningIndex].amount.toLocaleString()}</span>
+              <span className="text-gray-300 text-sm">({recentEarnings[currentEarningIndex].type})</span>
+              <span className="text-gray-400 text-sm">{recentEarnings[currentEarningIndex].time}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Transfer Money Modal */}
       {showTransferModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -383,7 +428,7 @@ export default function DashboardPage() {
             </div>
             <div className="space-y-4 text-sm">
               <div className="bg-white/5 p-4 rounded-lg">
-                <p className="text-gray-200 mb-2">Receiver Details:</p>
+                <p className="text-gray-200 mb-2">Receiver's Details:</p>
                 <div className="space-y-2">
                   <p className="text-gray-200">Bank: <span className="text-white">{transferForm.bank}</span></p>
                   <p className="text-gray-200">Account Name: <span className="text-white">{transferForm.accountName}</span></p>
@@ -502,6 +547,8 @@ export default function DashboardPage() {
               ))}
             </div>
           </div>
+
+  
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md">
