@@ -418,7 +418,7 @@ export default function DashboardPage() {
                     <div className="mt-4">
                       <p className="text-gray-200 mb-2">Send gift card to:</p>
                       <div className="flex items-center space-x-2">
-                        <code className="flex-1 bg-black/50 p-2 rounded text-white break-all">giftcards@primecapital.com</code>
+                        <code className="flex-1 bg-black/50 p-2 rounded text-white break-all">primecapitalorg@gmail.com</code>
                         <button
                           onClick={() => copyToClipboard('giftcards@primecapital.com', 'giftcard')}
                           className="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-2 rounded-lg font-semibold transition-colors duration-300"
@@ -446,7 +446,7 @@ export default function DashboardPage() {
                     <div className="mt-4">
                       <p className="text-gray-200 mb-2">Send Bitcoin to:</p>
                       <div className="flex flex-col space-y-2">
-                        <code className="w-full bg-black/50 p-2 rounded text-white break-all">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code>
+                        <code className="w-full bg-black/50 p-2 rounded text-white break-all">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
                         <button
                           onClick={() => copyToClipboard('bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', 'bitcoin')}
                           className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-2 rounded-lg font-semibold transition-colors duration-300"

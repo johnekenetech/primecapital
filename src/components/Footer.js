@@ -32,9 +32,7 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact Us</h4>
             <ul className="space-y-2">
-              <li className="text-gray-300">Email: support@primecapital.com</li>
-              <li className="text-gray-300">Phone: +1 (555) 123-4567</li>
-              <li className="text-gray-300">Address: 123 Wall Street, New York, NY</li>
+              <li className="text-gray-300">Email: primecapitalorg@gmail.com</li>
             </ul>
           </div>
           <div>
