@@ -147,9 +147,14 @@ export default function DashboardPage() {
       if (/^[a-zA-Z\s]*$/.test(value)) {
         setTransferForm({ ...transferForm, [name]: value });
       }
-    } else if (name === 'accountNumber' || name === 'amount') {
-      // Only allow numbers
-      if (/^\d*$/.test(value)) {
+    } else if (name === 'accountNumber') {
+      // Only allow numbers, max 10 digits
+      if (/^\d{0,10}$/.test(value)) {
+        setTransferForm({ ...transferForm, [name]: value });
+      }
+    } else if (name === 'amount') {
+      // Only allow numbers and decimal point, max 2 decimal places
+      if (/^\d*\.?\d{0,2}$/.test(value)) {
         setTransferForm({ ...transferForm, [name]: value });
       }
     } else {
@@ -397,8 +402,9 @@ export default function DashboardPage() {
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
                   placeholder="Enter account number"
                   required
-                  pattern="\d*"
-                  title="Only numbers are allowed"
+                  pattern="\d{10}"
+                  title="Only numbers are allowed (10 digits)"
+                  maxLength="10"
                 />
               </div>
               <div>
@@ -411,8 +417,8 @@ export default function DashboardPage() {
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
                   placeholder="Enter amount"
                   required
-                  pattern="\d*"
-                  title="Only numbers are allowed"
+                  pattern="\d*\.?\d{0,2}"
+                  title="Only numbers and up to 2 decimal places are allowed"
                 />
               </div>
               <button
