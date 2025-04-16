@@ -516,7 +516,7 @@ export default function DashboardPage() {
             </div>
             <div className="space-y-4 text-sm">
               <div className="bg-white/5 p-3 md:p-4 rounded-lg">
-                <p className="text-gray-200 mb-2 text-yellow-500">Receiver Details:</p>
+                <p className="text-gray-200 mb-2 text-yellow-500">Receiver Details: </p>
                 <div className="space-y-2">
                   <p className="text-gray-200">Bank: <span className="text-white">{transferForm.bank}</span></p>
                   <p className="text-gray-200">Account Name: <span className="text-white">{transferForm.accountName}</span></p>
