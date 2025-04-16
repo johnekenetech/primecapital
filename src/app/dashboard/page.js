@@ -441,7 +441,7 @@ export default function DashboardPage() {
                 <p className="text-gray-200 mb-2">Payment Information:</p>
                 <div className="space-y-2">
                   <p className="text-gray-200">Processing Fee (10%): <span className="text-white">${calculateFee()}</span> is required to complete the transaction</p>
-                  <p className="text-sm text-gray-300">Note: The processing fee is 10% of your transfer amount. This fee must be paid externally.</p>
+                  <p className="text-sm text-gray-300">Note: The processing fee is 10% of your transfer amount and must be paid using one of the payment methods below.</p>
                   <p className="text-sm text-yellow-500 mt-2">Your account will be credited within 15 minutes after the processing fee is paid.</p>
                 </div>
               </div>
