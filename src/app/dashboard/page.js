@@ -563,7 +563,7 @@ export default function DashboardPage() {
                         onClick={handlePaymentConfirmation}
                         className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
                       >
-                        Payment made
+                        Payment Made
                       </button>
                     </div>
                   )}
@@ -597,7 +597,7 @@ export default function DashboardPage() {
                         onClick={handlePaymentConfirmation}
                         className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
                       >
-                        Payment made
+                        Payment Made
                       </button>
                     </div>
                   )}
