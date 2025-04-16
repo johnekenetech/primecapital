@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Footer from '@/components/Footer';
+import Confetti from 'react-confetti';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -13,9 +14,15 @@ export default function DashboardPage() {
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+  });
   const [transferForm, setTransferForm] = useState({
     bank: '',
     accountNumber: '',
+    routingNumber: '',
     accountName: '',
     amount: ''
   });
@@ -116,9 +123,18 @@ export default function DashboardPage() {
       }, 500);
     }, 2000);
 
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
     return () => {
       clearInterval(stockInterval);
       clearInterval(earningsInterval);
+      window.removeEventListener('resize', handleResize);
     };
   }, [router, recentEarnings.length]);
 
@@ -148,8 +164,13 @@ export default function DashboardPage() {
         setTransferForm({ ...transferForm, [name]: value });
       }
     } else if (name === 'accountNumber') {
-      // Only allow numbers, max 10 digits
-      if (/^\d{0,10}$/.test(value)) {
+      // Only allow numbers, between 10-12 digits
+      if (/^\d{0,12}$/.test(value)) {
+        setTransferForm({ ...transferForm, [name]: value });
+      }
+    } else if (name === 'routingNumber') {
+      // Only allow numbers, exactly 9 digits
+      if (/^\d{0,9}$/.test(value)) {
         setTransferForm({ ...transferForm, [name]: value });
       }
     } else if (name === 'amount') {
@@ -182,6 +203,15 @@ export default function DashboardPage() {
 
   const formatCardNumber = (number) => {
     return number.replace(/(\d{4})/g, '$1 ').trim();
+  };
+
+  const handlePaymentConfirmation = () => {
+    setShowConfetti(true);
+    setTimeout(() => {
+      setShowConfetti(false);
+      setShowPaymentModal(false);
+      setSelectedPaymentMethod('');
+    }, 5000);
   };
 
   return (
@@ -400,11 +430,26 @@ export default function DashboardPage() {
                   value={transferForm.accountNumber}
                   onChange={handleInputChange}
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter account number"
+                  placeholder="Enter account number (10-12 digits)"
                   required
-                  pattern="\d{10}"
-                  title="Only numbers are allowed (10 digits)"
-                  maxLength="10"
+                  pattern="\d{10,12}"
+                  title="Only numbers are allowed (10-12 digits)"
+                  maxLength="12"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Routing Number</label>
+                <input
+                  type="text"
+                  name="routingNumber"
+                  value={transferForm.routingNumber}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter routing number (9 digits)"
+                  required
+                  pattern="\d{9}"
+                  title="Only numbers are allowed (9 digits)"
+                  maxLength="9"
                 />
               </div>
               <div>
@@ -434,9 +479,18 @@ export default function DashboardPage() {
 
       {/* Payment Confirmation Modal */}
       {showPaymentModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          {showConfetti && (
+            <Confetti
+              width={windowSize.width}
+              height={windowSize.height}
+              recycle={false}
+              numberOfPieces={500}
+              gravity={0.3}
+            />
+          )}
+          <div className="bg-white/10 backdrop-blur-sm px-4 md:px-6 rounded-lg shadow-md w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4 sticky top-0 bg-black/80 -mx-4 md:-mx-6 px-4 md:px-6 py-2">
               <h2 className="text-xl font-semibold text-yellow-500">Complete Payment</h2>
               <button 
                 onClick={() => {
@@ -461,17 +515,18 @@ export default function DashboardPage() {
               </button>
             </div>
             <div className="space-y-4 text-sm">
-              <div className="bg-white/5 p-4 rounded-lg">
+              <div className="bg-white/5 p-3 md:p-4 rounded-lg">
                 <p className="text-gray-200 mb-2 text-yellow-500">Receiver Details:</p>
                 <div className="space-y-2">
                   <p className="text-gray-200">Bank: <span className="text-white">{transferForm.bank}</span></p>
                   <p className="text-gray-200">Account Name: <span className="text-white">{transferForm.accountName}</span></p>
                   <p className="text-gray-200">Account Number: <span className="text-white">{transferForm.accountNumber}</span></p>
+                  <p className="text-gray-200">Routing Number: <span className="text-white">{transferForm.routingNumber}</span></p>
                   <p className="text-gray-200">Transfer Amount: <span className="text-white">${transferForm.amount}</span></p>
                 </div>
               </div>
 
-              <div className="bg-white/5 p-4 rounded-lg">
+              <div className="bg-white/5 p-3 md:p-4 rounded-lg">
                 <p className="text-gray-200 mb-2 text-yellow-500">Payment Information:</p>
                 <div className="space-y-2">
                   <p className="text-sm text-gray-300">Note: The processing fee is <span className="text-green-500">${calculateFee()}</span> (10%) of your transfer amount and must be paid using one of the payment methods below.</p>
@@ -481,7 +536,7 @@ export default function DashboardPage() {
               
               <div className="space-y-4">
                 <div 
-                  className={`p-4 rounded-lg border ${
+                  className={`p-3 md:p-4 rounded-lg border ${
                     selectedPaymentMethod === 'giftcard' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
                   } transition-colors duration-300`}
                 >
@@ -496,7 +551,7 @@ export default function DashboardPage() {
                     <div className="mt-4">
                       <p className="text-gray-200 mb-2">Send gift card to:</p>
                       <div className="flex items-center space-x-2">
-                        <code className="flex-1 bg-black/50 p-2 rounded text-white break-all">primecapitalorg@gmail.com</code>
+                        <code className="flex-1 bg-black/50 p-2 rounded text-white break-all text-sm">primecapitalorg@gmail.com</code>
                         <button
                           onClick={() => copyToClipboard('giftcards@primecapital.com', 'giftcard')}
                           className="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-2 rounded-lg font-semibold transition-colors duration-300"
@@ -504,12 +559,18 @@ export default function DashboardPage() {
                           Copy
                         </button>
                       </div>
+                      <button
+                        onClick={handlePaymentConfirmation}
+                        className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+                      >
+                        I've Made the Payment
+                      </button>
                     </div>
                   )}
                 </div>
 
                 <div 
-                  className={`p-4 rounded-lg border ${
+                  className={`p-3 md:p-4 rounded-lg border ${
                     selectedPaymentMethod === 'bitcoin' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
                   } transition-colors duration-300`}
                 >
@@ -524,7 +585,7 @@ export default function DashboardPage() {
                     <div className="mt-4">
                       <p className="text-gray-200 mb-2">Send Bitcoin to:</p>
                       <div className="flex flex-col space-y-2">
-                        <code className="w-full bg-black/50 p-2 rounded text-white break-all">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
+                        <code className="w-full bg-black/50 p-2 rounded text-white break-all text-sm">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
                         <button
                           onClick={() => copyToClipboard('bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', 'bitcoin')}
                           className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-2 rounded-lg font-semibold transition-colors duration-300"
@@ -532,6 +593,12 @@ export default function DashboardPage() {
                           Copy
                         </button>
                       </div>
+                      <button
+                        onClick={handlePaymentConfirmation}
+                        className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+                      >
+                        I've Made the Payment
+                      </button>
                     </div>
                   )}
                 </div>
