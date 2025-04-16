@@ -428,7 +428,7 @@ export default function DashboardPage() {
             </div>
             <div className="space-y-4 text-sm">
               <div className="bg-white/5 p-4 rounded-lg">
-                <p className="text-gray-200 mb-2">Receiver Details:</p>
+                <p className="text-gray-200 mb-2 text-yellow-500">Receiver Details:</p>
                 <div className="space-y-2">
                   <p className="text-gray-200">Bank: <span className="text-white">{transferForm.bank}</span></p>
                   <p className="text-gray-200">Account Name: <span className="text-white">{transferForm.accountName}</span></p>
@@ -438,9 +438,9 @@ export default function DashboardPage() {
               </div>
 
               <div className="bg-white/5 p-4 rounded-lg">
-                <p className="text-gray-200 mb-2">Payment Information:</p>
+                <p className="text-gray-200 mb-2 text-yellow-500">Payment Information:</p>
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-300">Note: The processing fee is 10% <span className="text-green">${calculateFee()}</span> of your transfer amount and must be paid using one of the payment methods below.</p>
+                  <p className="text-sm text-gray-300">Note: The processing fee is 10% <span className="text-green-500">${calculateFee()}</span> of your transfer amount and must be paid using one of the payment methods below.</p>
                   <p className="text-sm text-yellow-500 mt-2">Your account will be credited within 15 minutes after the processing fee is paid.</p>
                 </div>
               </div>
