@@ -22,11 +22,6 @@ export default function Footer() {
                   Profile
                 </Link>
               </li>
-              <li>
-                <Link href="/investments" className="text-gray-300 hover:text-yellow-500 transition-colors">
-                  Investments
-                </Link>
-              </li>
             </ul>
           </div>
           <div>

@@ -8,14 +8,13 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState({
     name: 'Najee',
     email: 'najee@example.com',
-    phone: '+1 (555) 123-4567',
-    address: '123 Main St, New York, NY 10001',
+    phone: '+1 (874) 433-3423',
+    address: '**************',
     dateOfBirth: '1990-01-01',
     ssn: '***-**-1234',
     kycStatus: 'Verified',
     accountType: 'Premium',
-    memberSince: '2023-01-01',
-    lastLogin: '2024-03-15 14:30',
+    memberSince: '2021-02-23',
     twoFactorEnabled: true,
     notifications: true,
     language: 'English',
@@ -173,15 +172,6 @@ export default function ProfilePage() {
                       <input
                         type="text"
                         value={profile.memberSince}
-                        disabled
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white opacity-50"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gray-200 mb-1">Last Login</label>
-                      <input
-                        type="text"
-                        value={profile.lastLogin}
                         disabled
                         className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white opacity-50"
                       />

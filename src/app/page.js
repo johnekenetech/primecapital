@@ -61,6 +61,13 @@ export default function Home() {
           </Link>
         </div>
         <TrustIndicators />
+
+        <div className="flex items-center space-x-4  p-4 mt-10 rounded-lg backdrop-blur-sm">
+            <img src="/sec.png" alt="SEC Logo" className="h-12 w-auto" />
+            <p className="text-white text-sm">Licensed and regulated by the U.S. Securities and Exchange Commission (SEC)</p>
+        </div>
+
+       
       </div>
     </main>
   );
