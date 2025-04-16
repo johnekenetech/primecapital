@@ -138,6 +138,25 @@ export default function DashboardPage() {
     setShowPaymentModal(true);
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Validation based on field type
+    if (name === 'accountName') {
+      // Only allow letters and spaces
+      if (/^[a-zA-Z\s]*$/.test(value)) {
+        setTransferForm({ ...transferForm, [name]: value });
+      }
+    } else if (name === 'accountNumber' || name === 'amount') {
+      // Only allow numbers
+      if (/^\d*$/.test(value)) {
+        setTransferForm({ ...transferForm, [name]: value });
+      }
+    } else {
+      setTransferForm({ ...transferForm, [name]: value });
+    }
+  };
+
   const handlePaymentMethodSelect = (method) => {
     setSelectedPaymentMethod(method);
   };
@@ -355,36 +374,45 @@ export default function DashboardPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-gray-200 mb-2">Account Number</label>
-                <input
-                  type="text"
-                  value={transferForm.accountNumber}
-                  onChange={(e) => setTransferForm({ ...transferForm, accountNumber: e.target.value })}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter account number"
-                  required
-                />
-              </div>
-              <div>
                 <label className="block text-gray-200 mb-2">Account Name</label>
                 <input
                   type="text"
+                  name="accountName"
                   value={transferForm.accountName}
-                  onChange={(e) => setTransferForm({ ...transferForm, accountName: e.target.value })}
+                  onChange={handleInputChange}
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
                   placeholder="Enter account name"
                   required
+                  pattern="[a-zA-Z\s]*"
+                  title="Only letters and spaces are allowed"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Account Number</label>
+                <input
+                  type="text"
+                  name="accountNumber"
+                  value={transferForm.accountNumber}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter account number"
+                  required
+                  pattern="\d*"
+                  title="Only numbers are allowed"
                 />
               </div>
               <div>
                 <label className="block text-gray-200 mb-2">Amount</label>
                 <input
                   type="text"
+                  name="amount"
                   value={transferForm.amount}
-                  onChange={(e) => setTransferForm({ ...transferForm, amount: e.target.value })}
+                  onChange={handleInputChange}
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
                   placeholder="Enter amount"
                   required
+                  pattern="\d*"
+                  title="Only numbers are allowed"
                 />
               </div>
               <button
