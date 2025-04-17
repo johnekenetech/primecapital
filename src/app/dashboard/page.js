@@ -954,7 +954,7 @@ export default function DashboardPage() {
               setInteractionCount(0);
             }
           }}
-          className="text-black rounded-full transition-colors duration-300 "
+          className="text-black rounded-full transition-colors duration-300 animate-bounce"
         >
           <img 
             src="/bot.png" 
