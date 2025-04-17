@@ -7,7 +7,7 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
     name: 'Najee',
-    email: 'najee@example.com',
+    email: 'najeepugh@gmail.com',
     phone: '+1 (874) 433-3423',
     address: '**************',
     dateOfBirth: '1990-01-01',
