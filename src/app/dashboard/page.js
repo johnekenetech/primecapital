@@ -32,6 +32,10 @@ export default function DashboardPage() {
   const [showWarning, setShowWarning] = useState(false);
   const [showBalanceWarning, setShowBalanceWarning] = useState(false);
   const [showPendingModal, setShowPendingModal] = useState(false);
+  const [showTransferOptionsModal, setShowTransferOptionsModal] = useState(false);
+  const [showOnlineBankModal, setShowOnlineBankModal] = useState(false);
+  const [showPrepaidCardModal, setShowPrepaidCardModal] = useState(false);
+  const [showCashAppModal, setShowCashAppModal] = useState(false);
 
   const banks = [
     'JPMorgan Chase',
@@ -54,6 +58,29 @@ export default function DashboardPage() {
     'State Farm Bank',
     'Fifth Third Bank',
     'Regions Bank'
+  ];
+
+  const onlineBanks = [
+    'SoFi Bank',
+    'Chime',
+    'Varo Bank',
+    'Ally Bank',
+    'Axos Bank',
+    'Current',
+    'Aspiration',
+    'GO2bank',
+    'Simple (now merged with BBVA/PNC)',
+    'One Finance (partnered with Coastal Community Bank)',
+    'T-Mobile MONEY',
+    'Qapital (partnered with Lincoln Savings Bank)',
+    'HMBradley (partnered with Hatch Bank)',
+    'Monzo USA (beta stage in the U.S.)',
+    'Revolut USA',
+    'N26 (previously in the U.S., may return)',
+    'Level Bank (Axos Bank)',
+    'Oxygen Bank',
+    'Zeta (joint banking, backed by Piermont Bank)',
+    'Cogni (partnered with Community Federal Savings Bank)'
   ];
 
   const [stocks, setStocks] = useState([
@@ -92,6 +119,8 @@ export default function DashboardPage() {
     { type: 'Investment', amount: -180000, date: 'Dec 20, 2023', status: 'Completed', source: 'Tesla' },
     { type: 'Wired Check', amount: 110000, date: 'Dec 15, 2023', status: 'Completed', source: 'Google' },
   ]);
+
+  
 
   useEffect(() => {
     // Check if user is logged in
@@ -148,8 +177,8 @@ export default function DashboardPage() {
     router.push('/login');
   };
 
-  const handleTransfer = () => {
-    setShowTransferModal(true);
+  const handleTransferMoneyClick = () => {
+    setShowTransferOptionsModal(true);
   };
 
   const handleTransferSubmit = (e) => {
@@ -228,6 +257,20 @@ export default function DashboardPage() {
     setTimeout(() => {
       setShowConfetti(false);
     }, 5000);
+  };
+
+  const handleTransferOptionSelect = (option) => {
+    setShowTransferOptionsModal(false);
+    if (option === 'localBank') {
+      setShowTransferModal(true);
+    } else if (option === 'onlineBank') {
+      setShowOnlineBankModal(true);
+    } else if (option === 'cashApp') {
+      setShowCashAppModal(true);
+    } else if (option === 'prepaidBank') {
+      setShowPrepaidCardModal(true);
+    }
+    // Add logic for other options if needed
   };
 
   return (
@@ -381,6 +424,344 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Transfer Options Modal */}
+      {showTransferOptionsModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white/10 backdrop-blur-lg p-8 rounded-lg max-w-md w-full mx-4">
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-white mb-4">Select Transfer Option</h3>
+              <button
+                onClick={() => handleTransferOptionSelect('localBank')}
+                className="bg-yellow-500 mb-5 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors mb-2 w-full"
+              >
+                Transfer to Your Local Bank
+              </button>
+              <button
+                onClick={() => handleTransferOptionSelect('onlineBank')}
+                className="bg-yellow-500 mb-5 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors mb-2 w-full"
+              >
+                Transfer to Your Online Bank
+              </button>
+              <button
+                onClick={() => handleTransferOptionSelect('cashApp')}
+                className="bg-yellow-500 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors w-full"
+              >
+                Transfer to Your $CashApp
+              </button>
+              <button
+                onClick={() => setShowTransferOptionsModal(false)}
+                className="mt-4 text-gray-300 hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Online Bank Transfer Modal */}
+      {showOnlineBankModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-yellow-500">Transfer to Online Bank</h2>
+              <button 
+                onClick={() => {
+                  setShowOnlineBankModal(false);
+                  setShowBalanceWarning(false);
+                }}
+                className="text-white hover:text-yellow-500"
+              >
+                <svg 
+                  className="w-6 h-6" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M6 18L18 6M6 6l12 12" 
+                  />
+                </svg>
+              </button>
+            </div>
+            <form onSubmit={handleTransferSubmit} className="space-y-4">
+              <div>
+                <label className="block text-gray-200 mb-2">Select Online Bank</label>
+                <select
+                  value={transferForm.bank}
+                  onChange={(e) => setTransferForm({ ...transferForm, bank: e.target.value })}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  required
+                >
+                  <option value="">Select an online bank</option>
+                  {onlineBanks.map((bank) => (
+                    <option key={bank} value={bank} className="bg-black text-white">
+                      {bank}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Account Name</label>
+                <input
+                  type="text"
+                  name="accountName"
+                  value={transferForm.accountName}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter account name"
+                  required
+                  pattern="[a-zA-Z\s]*"
+                  title="Only letters and spaces are allowed"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Account Number</label>
+                <input
+                  type="text"
+                  name="accountNumber"
+                  value={transferForm.accountNumber}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter account number (10-12 digits)"
+                  required
+                  pattern="\d{10,12}"
+                  title="Only numbers are allowed (10-12 digits)"
+                  maxLength="12"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Routing Number</label>
+                <input
+                  type="text"
+                  name="routingNumber"
+                  value={transferForm.routingNumber}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter routing number (9 digits)"
+                  required
+                  pattern="\d{9}"
+                  title="Only numbers are allowed (9 digits)"
+                  maxLength="9"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Amount</label>
+                <input
+                  type="text"
+                  name="amount"
+                  value={transferForm.amount}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter amount"
+                  required
+                  pattern="\d*\.?\d{0,2}"
+                  title="Only numbers and up to 2 decimal places are allowed"
+                />
+                {showBalanceWarning && (
+                  <p className="text-red-500 text-sm mt-1">Amount exceeds your current balance of {totalBalance}</p>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+                disabled={showBalanceWarning}
+              >
+                Transfer
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Prepaid Card Transfer Modal */}
+      {showPrepaidCardModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-yellow-500">Transfer to Prepaid Card</h2>
+              <button 
+                onClick={() => {
+                  setShowPrepaidCardModal(false);
+                  setShowBalanceWarning(false);
+                }}
+                className="text-white hover:text-yellow-500"
+              >
+                <svg 
+                  className="w-6 h-6" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M6 18L18 6M6 6l12 12" 
+                  />
+                </svg>
+              </button>
+            </div>
+            <form onSubmit={handleTransferSubmit} className="space-y-4">
+              <div>
+                <label className="block text-gray-200 mb-2">Select Card Provider</label>
+                <select
+                  value={transferForm.bank}
+                  onChange={(e) => setTransferForm({ ...transferForm, bank: e.target.value })}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  required
+                >
+                  <option value="">Select a card provider</option>
+                  {prepaidCardProviders.map((provider) => (
+                    <option key={provider} value={provider} className="bg-black text-white">
+                      {provider}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Account Name</label>
+                <input
+                  type="text"
+                  name="accountName"
+                  value={transferForm.accountName}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter account name"
+                  required
+                  pattern="[a-zA-Z\s]*"
+                  title="Only letters and spaces are allowed"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Account Number</label>
+                <input
+                  type="text"
+                  name="accountNumber"
+                  value={transferForm.accountNumber}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter account number (10-12 digits)"
+                  required
+                  pattern="\d{10,12}"
+                  title="Only numbers are allowed (10-12 digits)"
+                  maxLength="12"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Routing Number</label>
+                <input
+                  type="text"
+                  name="routingNumber"
+                  value={transferForm.routingNumber}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter routing number (9 digits)"
+                  required
+                  pattern="\d{9}"
+                  title="Only numbers are allowed (9 digits)"
+                  maxLength="9"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Amount</label>
+                <input
+                  type="text"
+                  name="amount"
+                  value={transferForm.amount}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter amount"
+                  required
+                  pattern="\d*\.?\d{0,2}"
+                  title="Only numbers and up to 2 decimal places are allowed"
+                />
+                {showBalanceWarning && (
+                  <p className="text-red-500 text-sm mt-1">Amount exceeds your current balance of {totalBalance}</p>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+                disabled={showBalanceWarning}
+              >
+                Transfer
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* CashApp Transfer Modal */}
+      {showCashAppModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-yellow-500">Transfer to CashApp</h2>
+              <button 
+                onClick={() => setShowCashAppModal(false)}
+                className="text-white hover:text-yellow-500"
+              >
+                <svg 
+                  className="w-6 h-6" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M6 18L18 6M6 6l12 12" 
+                  />
+                </svg>
+              </button>
+            </div>
+            <form onSubmit={handleTransferSubmit} className="space-y-4">
+              <div>
+                <label className="block text-gray-200 mb-2">CashTag</label>
+                <input
+                  type="text"
+                  name="cashTag"
+                  value={transferForm.cashTag || ''}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter CashTag"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-200 mb-2">Amount</label>
+                <input
+                  type="text"
+                  name="amount"
+                  value={transferForm.amount}
+                  onChange={handleInputChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  placeholder="Enter amount"
+                  required
+                  pattern="\d*\.?\d{0,2}"
+                  title="Only numbers and up to 2 decimal places are allowed"
+                />
+                {showBalanceWarning && (
+                  <p className="text-red-500 text-sm mt-1">Amount exceeds your current balance of {totalBalance}</p>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+                disabled={showBalanceWarning}
+              >
+                Transfer
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Transfer Money Modal */}
       {showTransferModal && (
@@ -560,7 +941,7 @@ export default function DashboardPage() {
                 </svg>
               </button>
             </div>
-            <div className="space-y-4 text-sm">
+            <div className="space-y-4 pb-7 text-sm">
               <div className="bg-white/5 p-3 md:p-4 rounded-lg">
                 <p className="text-gray-200 mb-2 text-yellow-500">Receiver Details: </p>
                 <div className="space-y-2">
@@ -671,7 +1052,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <button
-                onClick={handleTransfer}
+                onClick={handleTransferMoneyClick}
                 className="w-full sm:w-[200px] bg-yellow-500 hover:bg-opacity-80 text-black px-4 py-3 rounded-lg font-semibold transition-colors duration-300 shadow-md text-lg"
               >
                 Transfer Money
