@@ -268,8 +268,6 @@ export default function DashboardPage() {
       setShowTransferModal(true);
     } else if (option === 'onlineBank') {
       setShowOnlineBankModal(true);
-    } else if (option === 'cashApp') {
-      setShowCashAppModal(true);
     } else if (option === 'prepaidBank') {
       setShowPrepaidCardModal(true);
     }
@@ -459,12 +457,6 @@ export default function DashboardPage() {
                 Transfer to Your Online Bank
               </button>
               <button
-                onClick={() => handleTransferOptionSelect('cashApp')}
-                className="bg-yellow-500 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors w-full"
-              >
-                Transfer to Your $CashApp
-              </button>
-              <button
                 onClick={() => setShowTransferOptionsModal(false)}
                 className="mt-4 text-gray-300 hover:text-white transition-colors"
               >
@@ -562,78 +554,6 @@ export default function DashboardPage() {
                   pattern="\d{9}"
                   title="Only numbers are allowed (9 digits)"
                   maxLength="9"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200 mb-2">Amount</label>
-                <input
-                  type="text"
-                  name="amount"
-                  value={transferForm.amount}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter amount"
-                  required
-                  pattern="\d*\.?\d{0,2}"
-                  title="Only numbers and up to 2 decimal places are allowed"
-                />
-                {showBalanceWarning && (
-                  <p className="text-red-500 text-sm mt-1">Amount exceeds your current balance of {totalBalance}</p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
-                disabled={showBalanceWarning}
-              >
-                Transfer
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-     
-
-      {/* CashApp Transfer Modal */}
-      {showCashAppModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <button 
-                onClick={() => {
-                  setShowCashAppModal(false);
-                  setShowTransferOptionsModal(true);
-                  setShowBalanceWarning(false);
-                }}
-                className="text-white hover:text-yellow-500"
-              >
-                <svg 
-                  className="w-6 h-6" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M15 19l-7-7 7-7" 
-                  />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleTransferSubmit} className="space-y-4">
-              <div>
-                <label className="block text-gray-200 mb-2">CashTag</label>
-                <input
-                  type="text"
-                  name="cashTag"
-                  value={transferForm.cashTag || ''}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter CashTag"
-                  required
                 />
               </div>
               <div>
