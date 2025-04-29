@@ -6,12 +6,12 @@ import { useRouter } from 'next/navigation';
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
-    name: 'Najee',
-    email: 'najeepugh@gmail.com',
-    phone: '+1 (874) 433-3423',
+    name: 'domkarl arnold',
+    email: 'domkarlarnold@gmail.com',
+    phone: '+1 (874) 433-****',
     address: '**************',
-    dateOfBirth: '1990-01-01',
-    ssn: '***-**-1234',
+    dateOfBirth: '**********',
+    ssn: '***-**-2264',
     kycStatus: 'Verified',
     accountType: 'Premium',
     memberSince: '2021-02-23',

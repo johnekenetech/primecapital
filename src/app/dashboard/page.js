@@ -39,28 +39,52 @@ export default function DashboardPage() {
   const [showChatBot, setShowChatBot] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [interactionCount, setInteractionCount] = useState(0);
+  const [showLocationModal, setShowLocationModal] = useState(true);
+
+  // const banks = [
+  //   'JPMorgan Chase',
+  //   'Bank of America',
+  //   'Wells Fargo',
+  //   'Citibank',
+  //   'U.S. Bank',
+  //   'Truist Bank',
+  //   'PNC Bank',
+  //   'TD Bank',
+  //   'Capital One',
+  //   'Charles Schwab Bank',
+  //   'Goldman Sachs Bank',
+  //   'Morgan Stanley Bank',
+  //   'American Express Bank',
+  //   'Discover Bank',
+  //   'Ally Bank',
+  //   'USAA Bank',
+  //   'Navy Federal Credit Union',
+  //   'State Farm Bank',
+  //   'Fifth Third Bank',
+  //   'Regions Bank'
+  // ];
 
   const banks = [
-    'JPMorgan Chase',
-    'Bank of America',
-    'Wells Fargo',
-    'Citibank',
-    'U.S. Bank',
-    'Truist Bank',
-    'PNC Bank',
-    'TD Bank',
-    'Capital One',
-    'Charles Schwab Bank',
-    'Goldman Sachs Bank',
-    'Morgan Stanley Bank',
-    'American Express Bank',
-    'Discover Bank',
-    'Ally Bank',
-    'USAA Bank',
-    'Navy Federal Credit Union',
-    'State Farm Bank',
-    'Fifth Third Bank',
-    'Regions Bank'
+    'Deutsche Bank',
+    'Commerzbank',
+    'DZ Bank',
+    'KfW Bankengruppe',
+    'Unicredit Bank AG (HypoVereinsbank)',
+    'Landesbank Baden-Württemberg (LBBW)',
+    'BayernLB',
+    'NordLB',
+    'Helaba',
+    'Hamburger Sparkasse (Haspa)',
+    'Volksbanken Raiffeisenbanken',
+    'Sparkassen-Finanzgruppe',
+    'Berliner Sparkasse',
+    'Stadtsparkasse München',
+    'Frankfurter Sparkasse',
+    'N26',
+    'Revolut',
+    'DKB',
+    'ING-DiBa',
+    'Comdirect'
   ];
 
   const onlineBanks = [
@@ -201,7 +225,7 @@ export default function DashboardPage() {
       }
     } else if (name === 'accountNumber') {
       // Only allow numbers, between 10-12 digits
-      if (/^\d{0,12}$/.test(value)) {
+      if (/^\d{0,23}$/.test(value)) {
         setTransferForm({ ...transferForm, [name]: value });
       }
     } else if (name === 'routingNumber') {
@@ -288,6 +312,24 @@ export default function DashboardPage() {
 
   return (
     <main className="relative min-h-screen">
+      {/* Location Detection Modal */}
+      {showLocationModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[60]">
+          <div className="bg-white/10 backdrop-blur-lg p-6 rounded-lg max-w-md w-full mx-4">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-white mb-4">Location Detected </h3>
+              <p className="text-gray-300 mb-6">Germany</p>
+              <button
+                onClick={() => setShowLocationModal(false)}
+                className="bg-yellow-500 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Copy Confirmation Toast */}
       {showCopyConfirmation && (
         <div className="fixed bottom-4 right-4 bg-yellow-500 text-black px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-out">
@@ -450,12 +492,12 @@ export default function DashboardPage() {
               >
                 Transfer to Your Local Bank
               </button>
-              <button
+              {/* <button
                 onClick={() => handleTransferOptionSelect('onlineBank')}
                 className="bg-yellow-500 mb-5 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors mb-2 w-full"
               >
                 Transfer to Your Online Bank
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowTransferOptionsModal(false)}
                 className="mt-4 text-gray-300 hover:text-white transition-colors"
@@ -631,35 +673,35 @@ export default function DashboardPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-gray-200 mb-2">Account Name</label>
+                <label className="block text-gray-200 mb-2">Receipient Name</label>
                 <input
                   type="text"
                   name="accountName"
                   value={transferForm.accountName}
                   onChange={handleInputChange}
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter account name"
+                  placeholder="Enter name"
                   required
                   pattern="[a-zA-Z\s]*"
                   title="Only letters and spaces are allowed"
                 />
               </div>
               <div>
-                <label className="block text-gray-200 mb-2">Account Number</label>
+                <label className="block text-gray-200 mb-2">IBAN</label>
                 <input
                   type="text"
                   name="accountNumber"
                   value={transferForm.accountNumber}
                   onChange={handleInputChange}
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter account number (10-12 digits)"
+                  placeholder="Enter number"
                   required
-                  pattern="\d{10,12}"
-                  title="Only numbers are allowed (10-12 digits)"
-                  maxLength="12"
+                  pattern="\d{10,23}"
+                  title="Only numbers are allowed (10-23 digits)"
+                  maxLength="23"
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="block text-gray-200 mb-2">Routing Number</label>
                 <input
                   type="text"
@@ -673,7 +715,7 @@ export default function DashboardPage() {
                   title="Only numbers are allowed (9 digits)"
                   maxLength="9"
                 />
-              </div>
+              </div> */}
               <div>
                 <label className="block text-gray-200 mb-2">Amount</label>
                 <input
@@ -769,8 +811,8 @@ export default function DashboardPage() {
                 <div className="space-y-2">
                   <p className="text-gray-200">Bank Name: <span className="text-white">{transferForm.bank}</span></p>
                   <p className="text-gray-200">Account Name: <span className="text-white">{transferForm.accountName}</span></p>
-                  <p className="text-gray-200">Account Number: <span className="text-white">{transferForm.accountNumber}</span></p>
-                  <p className="text-gray-200">Routing Number: <span className="text-white">{transferForm.routingNumber}</span></p>
+                  <p className="text-gray-200">IBAN: <span className="text-white">{transferForm.accountNumber}</span></p>
+                  {/* <p className="text-gray-200">Routing Number: <span className="text-white">{transferForm.routingNumber}</span></p> */}
                   <p className="text-gray-200">Transfer Amount: <span className="text-white">${transferForm.amount}</span></p>
                 </div>
               </div>
@@ -944,8 +986,8 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center mb-8">
             <div className="flex items-center mb-4 md:mt-10">
-              <h1 className="text-3xl font-bold text-white ">Welcome back,</h1>
-              <p className="text-3xl font-bold text-white ml-2">{userName}.</p>
+              <h1 className="text-2xl font-bold text-white ">Welcome back,</h1>
+              <p className="text-2xl font-bold text-white ml-2">Arnold.</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <button
