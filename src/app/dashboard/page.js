@@ -313,7 +313,7 @@ export default function DashboardPage() {
   return (
     <main className="relative min-h-screen">
       {/* Location Detection Modal */}
-      {showLocationModal && (
+      {/* {showLocationModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[60]">
           <div className="bg-white/10 backdrop-blur-lg p-6 rounded-lg max-w-md w-full mx-4">
             <div className="text-center">
@@ -328,7 +328,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Copy Confirmation Toast */}
       {showCopyConfirmation && (

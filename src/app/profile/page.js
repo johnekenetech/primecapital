@@ -8,7 +8,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState({
     name: 'domkarl arnold',
     email: 'domkarlarnold@gmail.com',
-    phone: '+1 (874) 433-****',
+    phone: '+1 (956) 433-****',
     address: '**************',
     dateOfBirth: '**********',
     ssn: '***-**-2264',
