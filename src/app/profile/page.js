@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation';
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
-    name: 'domkarl arnold',
-    email: 'domkarlarnold@gmail.com',
+    name: 'jolene joshua',
+    email: 'jolenejoshua@gmail.com',
     phone: '+1 (956) 433-****',
     address: '**************',
     dateOfBirth: '**********',
@@ -18,7 +18,7 @@ export default function ProfilePage() {
     twoFactorEnabled: true,
     notifications: true,
     language: 'English',
-    timezone: 'America/New_York'
+    timezone: 'America/WT'
   });
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
