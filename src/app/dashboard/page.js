@@ -41,7 +41,7 @@ export default function DashboardPage() {
   const [interactionCount, setInteractionCount] = useState(0);
   const [showLocationModal, setShowLocationModal] = useState(true);
 
-  const banks = [
+  const americanBanks = [
     'JPMorgan Chase',
     'Bank of America',
     'Wells Fargo',
@@ -64,50 +64,50 @@ export default function DashboardPage() {
     'Regions Bank'
   ];
 
-  // const banks = [
-  //   'Deutsche Bank',
-  //   'Commerzbank',
-  //   'DZ Bank',
-  //   'KfW Bankengruppe',
-  //   'Unicredit Bank AG (HypoVereinsbank)',
-  //   'Landesbank Baden-Württemberg (LBBW)',
-  //   'BayernLB',
-  //   'NordLB',
-  //   'Helaba',
-  //   'Hamburger Sparkasse (Haspa)',
-  //   'Volksbanken Raiffeisenbanken',
-  //   'Sparkassen-Finanzgruppe',
-  //   'Berliner Sparkasse',
-  //   'Stadtsparkasse München',
-  //   'Frankfurter Sparkasse',
-  //   'N26',
-  //   'Revolut',
-  //   'DKB',
-  //   'ING-DiBa',
-  //   'Comdirect'
-  // ];
+  const canadianBanks = [
+    'Royal Bank of Canada',
+    'Toronto-Dominion Bank',
+    'Bank of Nova Scotia',
+    'Bank of Montreal',
+    'Canadian Imperial Bank of Commerce',
+    'National Bank of Canada',
+    'HSBC Bank Canada',
+    'Laurentian Bank of Canada',
+    'Equitable Bank',
+    'Manulife Bank of Canada',
+    'Canadian Western Bank',
+    'Tangerine Bank',
+    'Simplii Financial',
+    'Home Trust Company',
+    'ATB Financial',
+    'Alterna Bank',
+    'Motusbank',
+    'Coast Capital Savings',
+    'First Nations Bank of Canada',
+    'VersaBank',
+  ]
 
-  const onlineBanks = [
-    'SoFi Bank',
-    'Chime',
-    'Varo Bank',
-    'Ally Bank',
-    'Axos Bank',
-    'Current',
-    'Aspiration',
-    'GO2bank',
-    'Simple (now merged with BBVA/PNC)',
-    'One Finance (partnered with Coastal Community Bank)',
-    'T-Mobile MONEY',
-    'Qapital (partnered with Lincoln Savings Bank)',
-    'HMBradley (partnered with Hatch Bank)',
-    'Monzo USA (beta stage in the U.S.)',
-    'Revolut USA',
-    'N26 (previously in the U.S., may return)',
-    'Level Bank (Axos Bank)',
-    'Oxygen Bank',
-    'Zeta (joint banking, backed by Piermont Bank)',
-    'Cogni (partnered with Community Federal Savings Bank)'
+  const banks = [
+    'Deutsche Bank',
+    'Commerzbank',
+    'DZ Bank',
+    'KfW Bankengruppe',
+    'Unicredit Bank AG (HypoVereinsbank)',
+    'Landesbank Baden-Württemberg (LBBW)',
+    'BayernLB',
+    'NordLB',
+    'Helaba',
+    'Hamburger Sparkasse (Haspa)',
+    'Volksbanken Raiffeisenbanken',
+    'Sparkassen-Finanzgruppe',
+    'Berliner Sparkasse',
+    'Stadtsparkasse München',
+    'Frankfurter Sparkasse',
+    'N26',
+    'Revolut',
+    'DKB',
+    'ING-DiBa',
+    'Comdirect'
   ];
 
   const [stocks, setStocks] = useState([
@@ -225,7 +225,7 @@ export default function DashboardPage() {
       }
     } else if (name === 'accountNumber') {
       // Only allow numbers, between 10-12 digits
-      if (/^\d{0,12}$/.test(value)) {
+      if (/^\d{0,23}$/.test(value)) {
         setTransferForm({ ...transferForm, [name]: value });
       }
     } else if (name === 'routingNumber') {
@@ -473,14 +473,14 @@ export default function DashboardPage() {
                 onClick={() => handleTransferOptionSelect('localBank')}
                 className="bg-yellow-500 mb-5 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors mb-2 w-full"
               >
-                Transfer to Your Local Bank
+                Select your country's bank
               </button>
-              <button
+              {/* <button
                 onClick={() => handleTransferOptionSelect('onlineBank')}
                 className="bg-yellow-500 mb-5 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors mb-2 w-full"
               >
                 Transfer to Your Online Bank
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowTransferOptionsModal(false)}
                 className="mt-4 text-gray-300 hover:text-white transition-colors"
@@ -488,124 +488,6 @@ export default function DashboardPage() {
                 Cancel
               </button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Online Bank Transfer Modal */}
-      {showOnlineBankModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-md w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <button 
-                onClick={() => {
-                  setShowOnlineBankModal(false);
-                  setShowTransferOptionsModal(true);
-                  setShowBalanceWarning(false);
-                }}
-                className="text-white hover:text-yellow-500"
-              >
-                <svg 
-                  className="w-6 h-6" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M15 19l-7-7 7-7" 
-                  />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleTransferSubmit} className="space-y-4">
-              <div>
-                <label className="block text-gray-200 mb-2">Select Online Bank</label>
-                <select
-                  value={transferForm.bank}
-                  onChange={(e) => setTransferForm({ ...transferForm, bank: e.target.value })}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  required
-                >
-                  <option value="">Select an online bank</option>
-                  {onlineBanks.map((bank) => (
-                    <option key={bank} value={bank} className="bg-black text-white">
-                      {bank}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-gray-200 mb-2">Account Name</label>
-                <input
-                  type="text"
-                  name="accountName"
-                  value={transferForm.accountName}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter account name"
-                  required
-                  pattern="[a-zA-Z\s]*"
-                  title="Only letters and spaces are allowed"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200 mb-2">Account Number</label>
-                <input
-                  type="text"
-                  name="accountNumber"
-                  value={transferForm.accountNumber}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter account number (10-12 digits)"
-                  required
-                  pattern="\d{10,12}"
-                  title="Only numbers are allowed (10-12 digits)"
-                  maxLength="12"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200 mb-2">Routing Number</label>
-                <input
-                  type="text"
-                  name="routingNumber"
-                  value={transferForm.routingNumber}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter routing number (9 digits)"
-                  required
-                  pattern="\d{9}"
-                  title="Only numbers are allowed (9 digits)"
-                  maxLength="9"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200 mb-2">Amount</label>
-                <input
-                  type="text"
-                  name="amount"
-                  value={transferForm.amount}
-                  onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter amount"
-                  required
-                  pattern="\d*\.?\d{0,2}"
-                  title="Only numbers and up to 2 decimal places are allowed"
-                />
-                {showBalanceWarning && (
-                  <p className="text-red-500 text-sm mt-1">Amount exceeds your current balance of {totalBalance}</p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
-                disabled={showBalanceWarning}
-              >
-                Transfer
-              </button>
-            </form>
           </div>
         </div>
       )}
@@ -639,27 +521,36 @@ export default function DashboardPage() {
               </button>
             </div>
             <form onSubmit={handleTransferSubmit} className="space-y-4">
+              {/* Bank selection */}
               <div>
-                <label className="block text-gray-200 mb-2">Select Bank</label>
+                <label htmlFor="bank" className="block text-gray-200 mb-2">
+                  Select Bank
+                </label>
                 <select
+                  id="bank"
+                  name="bank"
                   value={transferForm.bank}
-                  onChange={(e) => setTransferForm({ ...transferForm, bank: e.target.value })}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                  onChange={handleInputChange}
                   required
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
                 >
-                  <option value="">Select a bank</option>
-                  {banks.map((bank) => (
-                    <option key={bank} value={bank} className="bg-black text-white">
-                      {bank}
-                    </option>
-                  ))}
+                  <option value="" disabled>— Select a bank —</option>
+                  <optgroup label="German Banks">
+                    {banks.map((b) => <option key={b} value={b}>{b}</option>)}
+                  </optgroup>
+                  <optgroup label="American Banks">
+                    {americanBanks.map((b) => <option key={b} value={b}>{b}</option>)}
+                  </optgroup>
+                  <optgroup label="Canadian Banks">
+                    {canadianBanks.map((b) => <option key={b} value={b}>{b}</option>)}
+                  </optgroup>
                 </select>
               </div>
               <div>
-              <label className="block text-gray-200 mb-2">Account Name</label>
+                <label className="block text-gray-200 mb-2">Receipient Name</label>
                 <input
                   type="text"
-                  name="accountName"
+                  name="accountName" 
                   value={transferForm.accountName}
                   onChange={handleInputChange}
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
@@ -670,7 +561,7 @@ export default function DashboardPage() {
                 />
               </div>
               <div>
-              <label className="block text-gray-200 mb-2">Account Number</label>
+                <label className="block text-gray-200 mb-2">IBAN/Account Number</label>
                 <input
                   type="text"
                   name="accountNumber"
@@ -679,9 +570,9 @@ export default function DashboardPage() {
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
                   placeholder="Enter account number"
                   required
-                  pattern="\d{10,12}"
-                  title="Only numbers are allowed (10-23 digits)"
-                  maxLength="12"
+                  pattern="\d{0,23}"
+                  title="Only numbers are allowed (0-23 digits)"
+                  maxLength="23"
                 />
               </div>
               <div>
@@ -692,10 +583,9 @@ export default function DashboardPage() {
                   value={transferForm.routingNumber}
                   onChange={handleInputChange}
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
-                  placeholder="Enter routing number"
-                  required
+                  placeholder="only for American banks"
                   pattern="\d{9}"
-                  title="Only numbers are allowed"
+                  title="Only numbers are allowed (9 digits)"
                   maxLength="9"
                 />
               </div>
@@ -793,8 +683,8 @@ export default function DashboardPage() {
                 <p className="text-gray-200 mb-2 text-yellow-500">Receiver Details: </p>
                 <div className="space-y-2">
                   <p className="text-gray-200">Bank Name: <span className="text-white">{transferForm.bank}</span></p>
-                  <p className="text-gray-200">Account Name: <span className="text-white">{transferForm.accountName}</span></p>
-                  <p className="text-gray-200">Account Number: <span className="text-white">{transferForm.accountNumber}</span></p>
+                  <p className="text-gray-200">Receipient Name: <span className="text-white">{transferForm.accountName}</span></p>
+                  <p className="text-gray-200">IBAN/Account Number: <span className="text-white">{transferForm.accountNumber}</span></p>
                   <p className="text-gray-200">Routing Number: <span className="text-white">{transferForm.routingNumber}</span></p>
                   <p className="text-gray-200">Transfer Amount: <span className="text-white">${transferForm.amount}</span></p>
                 </div>
@@ -969,7 +859,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center mb-8">
             <div className="flex items-center mb-4 md:mt-10">
-              <h1 className="text-2xl font-bold text-white ">Welcome back</h1>
+              <h1 className="text-2xl font-bold text-white ">Welcome back, Arnold.</h1>
               
             </div>
             <div className="flex flex-col sm:flex-row gap-4">

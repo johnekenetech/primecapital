@@ -32,52 +32,52 @@ export default function Home() {
     return securityAnswer.trim().toLowerCase() === correctAnswers[selectedUser];
   };
 
-  const renderUserSelectionModal = () => (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white/60 backdrop-blur-md p-8 rounded-lg shadow-lg text-center space-y-6 max-w-sm w-full">
-        <h2 className="text-xl text-black">Who is accessing this portfolio?</h2>
-        <button
-          onClick={() => setSelectedUser('Chappelow Joshue')}
-          className="w-full cursor-pointer py-2 px-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition"
-        >
-          Chappelow Joshua
-        </button>
-        <button
-          onClick={() => setSelectedUser('Carl Jolene')}
-          className="w-full py-2 px-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition"
-        >
-          Carl Jolene
-        </button>
-      </div>
-    </div>
-  );
+  // const renderUserSelectionModal = () => (
+  //   <div className="fixed inset-0 flex items-center justify-center z-50">
+  //     <div className="bg-white/60 backdrop-blur-md p-8 rounded-lg shadow-lg text-center space-y-6 max-w-sm w-full">
+  //       <h2 className="text-xl text-black">Who is accessing this portfolio?</h2>
+  //       <button
+  //         onClick={() => setSelectedUser('Chappelow Joshue')}
+  //         className="w-full cursor-pointer py-2 px-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition"
+  //       >
+  //         Chappelow Joshua
+  //       </button>
+  //       <button
+  //         onClick={() => setSelectedUser('Carl Jolene')}
+  //         className="w-full py-2 px-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition"
+  //       >
+  //         Carl Jolene
+  //       </button>
+  //     </div>
+  //   </div>
+  // );
 
-  const renderSecurityQuestion = () => (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white/60 backdrop-blur-md p-8 rounded-lg shadow-lg text-center space-y-4 max-w-sm w-full">
-        <h2 className="text-xl text-black">Security question</h2>
-        <h2 className="text-md text-black">What is your other name?</h2>
-        <input
-          type="text"
-          placeholder="Enter your other name"
-          value={securityAnswer}
-          onChange={(e) => setSecurityAnswer(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-yellow-500"
-        />
-        <button
-          onClick={() => setIsVerified(true)}
-          disabled={!isAnswerCorrect()}
-          className={`w-full py-2 px-4 rounded-lg font-medium transition ${
-            isAnswerCorrect()
-              ? 'bg-yellow-500 hover:bg-yellow-600 text-white cursor-pointer'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
-        >
-          Continue
-        </button>
-      </div>
-    </div>
-  );
+  // const renderSecurityQuestion = () => (
+  //   <div className="fixed inset-0 flex items-center justify-center z-50">
+  //     <div className="bg-white/60 backdrop-blur-md p-8 rounded-lg shadow-lg text-center space-y-4 max-w-sm w-full">
+  //       <h2 className="text-xl text-black">Security question</h2>
+  //       <h2 className="text-md text-black">What is your other name?</h2>
+  //       <input
+  //         type="text"
+  //         placeholder="Enter your other name"
+  //         value={securityAnswer}
+  //         onChange={(e) => setSecurityAnswer(e.target.value)}
+  //         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-yellow-500"
+  //       />
+  //       <button
+  //         onClick={() => setIsVerified(true)}
+  //         disabled={!isAnswerCorrect()}
+  //         className={`w-full py-2 px-4 rounded-lg font-medium transition ${
+  //           isAnswerCorrect()
+  //             ? 'bg-yellow-500 hover:bg-yellow-600 text-white cursor-pointer'
+  //             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+  //         }`}
+  //       >
+  //         Continue
+  //       </button>
+  //     </div>
+  //   </div>
+  // );
 
   if (isLoading) {
     return (
@@ -129,9 +129,9 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Transparent modals layered above landing page */}
+      {/* Transparent modals layered above landing page
       {!selectedUser && renderUserSelectionModal()}
-      {selectedUser && !isVerified && renderSecurityQuestion()}
+      {selectedUser && !isVerified && renderSecurityQuestion()} */}
     </main>
   );
 }
