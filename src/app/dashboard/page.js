@@ -473,7 +473,7 @@ export default function DashboardPage() {
                 onClick={() => handleTransferOptionSelect('localBank')}
                 className="bg-yellow-500 mb-5 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors mb-2 w-full"
               >
-                Select your country's bank
+                Select country bank
               </button>
               {/* <button
                 onClick={() => handleTransferOptionSelect('onlineBank')}
