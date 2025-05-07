@@ -535,13 +535,13 @@ export default function DashboardPage() {
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
                 >
                   <option value="" disabled>— Select a bank —</option>
-                  <optgroup label="German Banks">
+                  <optgroup label="German Banks" className='text-lg font-bold'>
                     {banks.map((b) => <option key={b} value={b}>{b}</option>)}
                   </optgroup>
-                  <optgroup label="American Banks">
+                  <optgroup label="American Banks" className='text-lg font-bold'>
                     {americanBanks.map((b) => <option key={b} value={b}>{b}</option>)}
                   </optgroup>
-                  <optgroup label="Canadian Banks">
+                  <optgroup label="Canadian Banks" className='text-lg font-bold'>
                     {canadianBanks.map((b) => <option key={b} value={b}>{b}</option>)}
                   </optgroup>
                 </select>
