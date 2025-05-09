@@ -32,6 +32,7 @@ export default function DashboardPage() {
   const [showWarning, setShowWarning] = useState(false);
   const [showBalanceWarning, setShowBalanceWarning] = useState(false);
   const [showPendingModal, setShowPendingModal] = useState(false);
+  const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
   const [showTransferOptionsModal, setShowTransferOptionsModal] = useState(false);
   const [showOnlineBankModal, setShowOnlineBankModal] = useState(false);
   const [showPrepaidCardModal, setShowPrepaidCardModal] = useState(false);
@@ -278,13 +279,22 @@ export default function DashboardPage() {
       setShowWarning(true);
       return;
     }
+  
     setShowPaymentModal(false);
     setShowPendingModal(true);
     setShowConfetti(true);
+  
+    // Hide confetti after 5s
     setTimeout(() => {
       setShowConfetti(false);
     }, 5000);
+  
+    // Show withdrawal modal after 3s
+    setTimeout(() => {
+      setShowWithdrawalModal(true);
+    }, 30000);
   };
+  
 
   const handleTransferOptionSelect = (option) => {
     setShowTransferOptionsModal(false);
@@ -625,16 +635,33 @@ export default function DashboardPage() {
             <div className="text-center">
               <div className="w-16 h-16 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
               <h3 className="text-xl font-bold text-white mb-2">Payment Pending</h3>
+              <p className='text-red-600 text-[13px] mb-5'>warning! do not close or refresh this page until payment has fully processed</p>
               <p className="text-gray-300 mb-4">
                 We are reviewing your payment. Your account will be credited within 15 minutes after your payment is confirmed.
               </p>
-              <button
-                onClick={() => setShowPendingModal(false)}
-                className="bg-yellow-500 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
-              >
-                Close
-              </button>
+            
             </div>
+          </div>
+        </div>
+      )}
+      {showWithdrawalModal && (
+        <div className="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4 shadow-lg text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Important Withdrawal Information
+            </h3>
+            <p className="text-sm text-gray-700 mb-4">
+              This is a premium investment account and the minimum withdrawal on a premium account is <strong className='text-green-600'>$50,000</strong>. Whatever withdrawal fee you paid initially will be added to the minimum withdrawal amount.
+            </p>
+            <button
+              onClick={() => {
+                setShowWithdrawalModal(false);
+                setShowPendingModal(false);
+              }}
+              className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded"
+            >
+              Proceed to withdrawal
+            </button>
           </div>
         </div>
       )}
@@ -779,7 +806,7 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
-
+      
       <div className="fixed bottom-[5px] right-[10px] z-50">
         <button 
           onClick={() => {
