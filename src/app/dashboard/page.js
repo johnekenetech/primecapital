@@ -52,7 +52,7 @@ export default function DashboardPage() {
     'PNC Bank',
     'TD Bank',
     'Capital One',
-    'Charles Schwab Bank',
+    'Sofi Bank',
     'Goldman Sachs Bank',
     'Morgan Stanley Bank',
     'American Express Bank',
