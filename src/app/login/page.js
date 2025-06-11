@@ -69,7 +69,7 @@ Last Updated: ${new Date().toLocaleDateString()}
     e.preventDefault();
     setError('');
     
-    if (email === 'rickyandrews@gmail.com' && password === 'ricky123') {
+    if (email === 'npugh87531@gmail.com' && password === 'Miracles!02469') {
       // Store authentication state
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userEmail', email);
