@@ -65,8 +65,8 @@ export default function ProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-xl font-semibold text-yellow-500 mb-4">Personal Information</h2>
-                  <div className="space-y-4">
+                  {/* <h2 className="text-xl font-semibold text-yellow-500 mb-4">Personal Information</h2> */}
+                  {/* <div className="space-y-4">
                     <div>
                       <label className="block text-gray-200 mb-1">Full Name</label>
                       <input
@@ -107,7 +107,7 @@ export default function ProfilePage() {
                         className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500 disabled:opacity-50"
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div>
@@ -172,6 +172,7 @@ export default function ProfilePage() {
                       <input
                         type="text"
                         value={profile.memberSince}
+                        placeholder='02-12-2023'
                         disabled
                         className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white opacity-50"
                       />

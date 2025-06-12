@@ -68,14 +68,14 @@ Last Updated: ${new Date().toLocaleDateString()}
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
-    
-    if (email === 'npugh87531@gmail.com' && password === 'Miracles!02469') {
-      // Store authentication state
+  
+    if (email.length >= 8 && password.length >= 8) {
+      // Accept any email and password that are at least 8 characters
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userEmail', email);
       router.push('/dashboard');
     } else {
-      setError('Invalid email or password');
+      setError('Email and password must be at least 8 characters long');
     }
   };
 
