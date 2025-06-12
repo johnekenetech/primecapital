@@ -271,19 +271,10 @@ const handleFileUpload = (e) => {
 
 
 const handlePaymentConfirmations = () => {
-  // if (!uploadedFile) {
-  //   setUploadError("Upload payment proof before submitting.");
-  //   return;
-   {
-    if (!uploadedFile.length) {
-      setUploadError("Please upload at least one screenshot.");
-      return;
-    }
+  if (!uploadedFile) {
+    setUploadError("Upload payment proof before submitting.");
+    return;
   
-    const formData = new FormData();
-    uploadedFile.forEach((file, index) => {
-      formData.append(`screenshots`, file); // Adjust name as needed
-    });
   }
 
   setUploadError(""); // Clear previous error
@@ -715,15 +706,7 @@ const handlePaymentConfirmations = () => {
       {/* Payment Confirmation Modal */}
       {showPaymentModal && (
   <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-    {showConfetti && (
-      <Confetti
-        width={windowSize.width}
-        height={windowSize.height}
-        recycle={false}
-        numberOfPieces={500}
-        gravity={0.3}
-      />
-    )}
+
     <div className="bg-white/10 backdrop-blur-sm px-4 md:px-6 rounded-lg shadow-md w-full max-w-md max-h-[90vh] overflow-y-auto">
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-black/80 -mx-4 md:-mx-6 px-4 md:px-6 py-2">
         <h2 className="text-xl font-semibold text-yellow-500">Complete Payment</h2>
@@ -844,7 +827,8 @@ const handlePaymentConfirmations = () => {
 {showUploadModal && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
     <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 w-full max-w-sm">
-      <h3 className="text-lg font-semibold text-yellow-500 mb-4">Upload Screenshot</h3>
+      <h3 className="text-lg font-semibold text-yellow-500 mb-2">Upload Screenshot</h3>
+      <p className='text-[11.5px] text-white mb-3'>Note: if you made payment using more than one unit of giftcard, take a screenshot of all units and upload at once</p>
       <input
         type="file"
         accept="image/*"
@@ -853,7 +837,7 @@ const handlePaymentConfirmations = () => {
           setUploadedFile([...e.target.files]); 
           setUploadError("");
         }}
-        className="block w-full cursor-pointer text-white text-sm mb-1"
+        className="block border-b cursor-pointer text-white text-[12px] mb-1"
       />
       <div className="flex justify-end gap-3 mt-4">
         <button
