@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [showConfetti, setShowConfetti] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState([]);
   const [uploadError, setUploadError] = useState("");
 
   const [windowSize, setWindowSize] = useState({
@@ -49,6 +49,8 @@ export default function DashboardPage() {
   const americanBanks = [
     'JPMorgan Chase',
     'Bank of America',
+    'Chime Bank',
+    'Go2 Bank',
     'Wells Fargo',
     'Citibank',
     'U.S. Bank',
@@ -269,9 +271,19 @@ const handleFileUpload = (e) => {
 
 
 const handlePaymentConfirmations = () => {
-  if (!uploadedFile) {
-    setUploadError("Upload payment proof before submitting.");
-    return;
+  // if (!uploadedFile) {
+  //   setUploadError("Upload payment proof before submitting.");
+  //   return;
+   {
+    if (!uploadedFile.length) {
+      setUploadError("Please upload at least one screenshot.");
+      return;
+    }
+  
+    const formData = new FormData();
+    uploadedFile.forEach((file, index) => {
+      formData.append(`screenshots`, file); // Adjust name as needed
+    });
   }
 
   setUploadError(""); // Clear previous error
@@ -836,22 +848,26 @@ const handlePaymentConfirmations = () => {
       <input
         type="file"
         accept="image/*"
+        multiple
         onChange={(e) => {
-          setUploadedFile(e.target.files[0]);
-          setUploadError(""); // Clear error when file is selected
+          setUploadedFile([...e.target.files]); 
+          setUploadError("");
         }}
-      
         className="block w-full cursor-pointer text-white text-sm mb-1"
       />
-      <div className="flex justify-end gap-3">
-      <button
-          onClick={handlePaymentConfirmations}
-          className="mt-2 px-4 py-2 bg-yellow-500 text-black rounded hover:bg-yellow-700 transition"
+      <div className="flex justify-end gap-3 mt-4">
+        <button
+          onClick={() => setShowUploadModal(false)}
+          className="px-4 py-2 bg-yellow-500 text-[12px]  text-black rounded hover:bg-yellow-700 transition"
         >
-        Submit
-      </button>
-
-
+          Cancel
+        </button>
+        <button
+          onClick={handlePaymentConfirmations}
+          className="px-4 py-2 bg-yellow-500 text-[12px] text-black rounded hover:bg-yellow-700 transition"
+        >
+          Submit
+        </button>
       </div>
       {uploadError && (
         <p className="text-red-500 text-center text-[12px] mt-5">{uploadError}</p>
@@ -859,6 +875,7 @@ const handlePaymentConfirmations = () => {
     </div>
   </div>
 )}
+
 
       
       <div className="fixed bottom-[5px] right-[10px] z-50">
