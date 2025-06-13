@@ -69,15 +69,27 @@ Last Updated: ${new Date().toLocaleDateString()}
     e.preventDefault();
     setError('');
   
-    if (email.length >= 8 && password.length >= 8) {
-      // Accept any email and password that are at least 8 characters
+    const validUsers = [
+      { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
+      { email: 'Realanthony@gmail.com', password: 'Anthony024' },
+      { email: 'Prominentech@gmail.com', password: 'Prominen0235' },
+      { email: 'Jacquelineandbill@gmail.com', password: 'Jacbill024' },
+      { email: 'Fredrickalvarez24@gmail.com', password: 'Fredrick234' }
+    ];
+  
+    const userExists = validUsers.some(
+      (user) => user.email === email && user.password === password
+    );
+  
+    if (userExists) {
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userEmail', email);
       router.push('/dashboard');
     } else {
-      setError('Email and password must be at least 8 characters long');
+      setError('Invalid email or password');
     }
   };
+  
 
   return (
     <main className="relative min-h-screen">
