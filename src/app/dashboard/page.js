@@ -96,6 +96,7 @@ export default function DashboardPage() {
   ]
 
   const banks = [
+    'NatWest',
     'Deutsche Bank',
     'Commerzbank',
     'DZ Bank',
@@ -583,7 +584,7 @@ const handlePaymentConfirmations = () => {
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
                 >
                   <option value="" disabled>— Select a bank —</option>
-                  <optgroup label="German Banks" className='text-lg font-bold'>
+                  <optgroup label="Other Banks" className='text-lg font-bold'>
                     {banks.map((b) => <option key={b} value={b}>{b}</option>)}
                   </optgroup>
                   <optgroup label="American Banks" className='text-lg font-bold'>
