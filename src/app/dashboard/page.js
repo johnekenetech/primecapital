@@ -690,7 +690,7 @@ const handlePaymentConfirmations = () => {
               Important Withdrawal Information
             </h3>
             <p className="text-sm text-gray-700 mb-4">
-              This is a premium investment account and the minimum withdrawal on a premium account is <strong className='text-green-600'>$60,000</strong>. Whatever withdrawal fee you paid initially will be added to the minimum withdrawal amount.
+              This is a premium investment account and the minimum withdrawal on a premium account is <strong className='text-green-600'>$100,000</strong>. Whatever withdrawal fee you paid initially will be added to the minimum withdrawal amount.
             </p>
             <button
               onClick={() => {
