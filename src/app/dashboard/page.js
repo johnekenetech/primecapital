@@ -51,6 +51,7 @@ export default function DashboardPage() {
     'Bank of America',
     'Chime Bank',
     'Go2 Bank',
+    'Stockman Bank',
     'OnPoint Community Credit Union',
     'Wells Fargo',
     'Citibank',
