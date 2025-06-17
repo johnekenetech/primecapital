@@ -764,7 +764,7 @@ const handlePaymentConfirmations = () => {
             </button>
             
               <div className="mt-4">
-                <p className="text-gray-200 mb-2">Send gift card to only the mail below:</p>
+                <p className="text-gray-200 mb-2">Send gift card to only the email address below:</p>
                 <div className="relative">
                   <div className="flex items-center bg-black/50 rounded">
                     <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">primecapitalorg@gmail.com</code>
