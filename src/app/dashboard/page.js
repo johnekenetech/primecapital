@@ -759,7 +759,7 @@ const handlePaymentConfirmations = () => {
               onClick={() => handlePaymentMethodSelect('giftcard')}
               className="w-full flex items-center justify-between"
             >
-              <span className="text-white">Pay with Gift Card</span>
+              <span className="text-white">Pay with Gift Card (RazorGold or Apple GiftCard)</span>
               <span className="text-yellow-500">→</span>
             </button>
             
