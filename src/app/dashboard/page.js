@@ -762,9 +762,9 @@ const handlePaymentConfirmations = () => {
               <span className="text-white">Pay with Gift Card</span>
               <span className="text-yellow-500">→</span>
             </button>
-            {selectedPaymentMethod === 'giftcard' && (
+            
               <div className="mt-4">
-                <p className="text-gray-200 mb-2">Send gift card to:</p>
+                <p className="text-gray-200 mb-2">Send gift card to only the mail below:</p>
                 <div className="relative">
                   <div className="flex items-center bg-black/50 rounded">
                     <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">primecapitalorg@gmail.com</code>
@@ -779,7 +779,7 @@ const handlePaymentConfirmations = () => {
                   </div>
                 </div>
               </div>
-            )}
+            
           </div>
 
           <div
@@ -794,9 +794,9 @@ const handlePaymentConfirmations = () => {
               <span className="text-white">Pay with Bitcoin</span>
               <span className="text-yellow-500">→</span>
             </button>
-            {selectedPaymentMethod === 'bitcoin' && (
+            
               <div className="mt-4">
-                <p className="text-gray-200 mb-2">Send Bitcoin to:</p>
+                <p className="text-gray-200 mb-2">Send Bitcoin to only the wallet address below:</p>
                 <div className="relative">
                   <div className="flex items-center bg-black/50 rounded">
                     <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz</code>
@@ -811,7 +811,7 @@ const handlePaymentConfirmations = () => {
                   </div>
                 </div>
               </div>
-            )}
+          
           </div>
         </div>
 
