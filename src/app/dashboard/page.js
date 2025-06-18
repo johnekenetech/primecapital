@@ -274,10 +274,9 @@ const handleFileUpload = (e) => {
 
 
 const handlePaymentConfirmations = () => {
-  if (!uploadedFile) {
+  if (!uploadedFile || uploadedFile.length === 0) {
     setUploadError("Upload payment proof before submitting.");
     return;
-  
   }
 
   setUploadError(""); // Clear previous error
@@ -292,6 +291,7 @@ const handlePaymentConfirmations = () => {
     setShowWithdrawalModal(true);
   }, 20000);
 };
+
 
   
   
