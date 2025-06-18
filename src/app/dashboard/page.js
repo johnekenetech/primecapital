@@ -120,6 +120,13 @@ export default function DashboardPage() {
     'Comdirect'
   ];
 
+  useEffect(() => {
+    if (showUploadModal) {
+      setUploadedFile([]);
+      setUploadError("");
+    }
+  }, [showUploadModal]);
+  
   const [stocks, setStocks] = useState([
     { symbol: 'AAPL', price: 185.64, change: 2.34, changePercent: 1.28 },
     { symbol: 'MSFT', price: 420.72, change: -1.23, changePercent: -0.29 },
@@ -291,7 +298,6 @@ const handlePaymentConfirmations = () => {
     setShowWithdrawalModal(true);
   }, 20000);
 };
-
 
   
   
@@ -691,8 +697,11 @@ const handlePaymentConfirmations = () => {
               Important Withdrawal Information
             </h3>
             <p className="text-sm text-gray-700 mb-4">
-              This is a premium investment account and the minimum withdrawal on a premium account is <strong className='text-green-600'>$100,000</strong>. Whatever withdrawal fee you paid initially will be added to the minimum withdrawal amount.
+              This is a premium investment account and the minimum withdrawal on a premium account is 
+              <strong className='text-green-600'>$100,000</strong>. Whatever withdrawal fee you 
+              paid initially will be added to the minimum withdrawal amount.
             </p>
+            <p className='text-sm '>You can send an email to primecapitalorg@gmail.com for further clarification or assistance</p>
             <button
               onClick={() => {
                 setShowWithdrawalModal(false);
