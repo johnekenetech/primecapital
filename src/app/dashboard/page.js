@@ -764,7 +764,7 @@ const handlePaymentConfirmations = () => {
             </button>
             
               <div className="mt-4">
-                <p className='text-red-500 mb-1'>Warning!</p>
+                <p className='text-red-500 mb-1'>warning!</p>
                 <p className="text-white mb-2">Send giftcards to only the email address below:</p>
                 <div className="relative">
                   <div className="flex items-center bg-black/50 rounded">
@@ -797,7 +797,7 @@ const handlePaymentConfirmations = () => {
             </button>
             
               <div className="mt-4">
-              <p className='text-red-500 mb-1'>Warning! </p>
+              <p className='text-red-500 mb-1'>warning! </p>
                 <p className="text-white mb-2">Send Bitcoin to only the wallet address below:</p>
                 <div className="relative">
                   <div className="flex items-center bg-black/50 rounded">
