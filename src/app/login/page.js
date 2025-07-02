@@ -70,11 +70,13 @@ Last Updated: ${new Date().toLocaleDateString()}
     setError('');
   
     const validUsers = [
-      { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
-      { email: 'Realanthony@gmail.com', password: 'Anthony024' },
-      { email: 'Prominentech@gmail.com', password: 'Prominen0235' },
-      { email: 'Jacquelineandbill@gmail.com', password: 'Jacbill024' },
-      { email: 'Fredrickalvarez24@gmail.com', password: 'Fredrick234' }
+      // { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
+      { email: 'ericwatsonbusiness@gmail.com', password: 'ericbusiness1234' }
+      
+      // { email: 'Realanthony@gmail.com', password: 'Anthony024' },
+      // { email: 'Prominentech@gmail.com', password: 'Prominen0235' },
+      // { email: 'Jacquelineandbill@gmail.com', password: 'Jacbill024' },
+      // { email: 'Fredrickalvarez24@gmail.com', password: 'Fredrick234' }
     ];
   
     const userExists = validUsers.some(
