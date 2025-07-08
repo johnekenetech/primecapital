@@ -71,7 +71,7 @@ Last Updated: ${new Date().toLocaleDateString()}
   
     const validUsers = [
       // { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
-      { email: 'ericwatsonbusiness@gmail.com', password: 'ericbusiness1234' }
+      { email: 'southwestgeneralhospitals@gmail.com', password: 'southwestgen02' }
       
       // { email: 'Realanthony@gmail.com', password: 'Anthony024' },
       // { email: 'Prominentech@gmail.com', password: 'Prominen0235' },
