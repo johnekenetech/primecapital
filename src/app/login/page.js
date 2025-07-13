@@ -75,7 +75,7 @@ Last Updated: ${new Date().toLocaleDateString()}
       
       // { email: 'Realanthony@gmail.com', password: 'Anthony024' },
       // { email: 'Prominentech@gmail.com', password: 'Prominen0235' },
-      // { email: 'Jacquelineandbill@gmail.com', password: 'Jacbill024' },
+      { email: 'Jacquelineandbill@gmail.com', password: 'Jacbill024' },
       // { email: 'Fredrickalvarez24@gmail.com', password: 'Fredrick234' }
     ];
   
