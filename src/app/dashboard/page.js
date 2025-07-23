@@ -824,6 +824,39 @@ const handlePaymentConfirmations = () => {
               </div>
           
           </div>
+
+          <div
+  className={`p-3 md:p-4 rounded-lg border ${
+    selectedPaymentMethod === 'cashapp' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
+  } transition-colors duration-300`}
+>
+  <button
+    onClick={() => handlePaymentMethodSelect('cashapp')}
+    className="w-full flex items-center justify-between"
+  >
+    <span className="text-white">Pay with CashApp</span>
+    <span className="text-yellow-500">→</span>
+  </button>
+
+  <div className="mt-4">
+    <p className="text-red-500 mb-1">warning!</p>
+    <p className="text-white mb-2">Send processing fee to only the CashApp tag below:</p>
+    <div className="relative">
+      <div className="flex items-center bg-black/50 rounded">
+        <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">$rickyblackdog123456</code>
+        <button
+          onClick={() => copyToClipboard('$rickyblackdog123456', 'cashapp')}
+          className="p-2 text-yellow-500 hover:text-yellow-400"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
         </div>
 
         {/* ✅ Unified Upload Screenshot Button */}
