@@ -759,7 +759,7 @@ const handlePaymentConfirmations = () => {
         </div>
 
         <div className="space-y-4">
-          <div
+          {/* <div
             className={`p-3 md:p-4 rounded-lg border ${
               selectedPaymentMethod === 'giftcard' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
             } transition-colors duration-300`}
@@ -790,7 +790,7 @@ const handlePaymentConfirmations = () => {
                 </div>
               </div>
             
-          </div>
+          </div> */}
 
           <div
             className={`p-3 md:p-4 rounded-lg border ${
@@ -825,7 +825,7 @@ const handlePaymentConfirmations = () => {
           
           </div>
 
-          <div
+          {/* <div
   className={`p-3 md:p-4 rounded-lg border ${
     selectedPaymentMethod === 'cashapp' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
   } transition-colors duration-300`}
@@ -853,9 +853,9 @@ const handlePaymentConfirmations = () => {
           </svg>
         </button>
       </div>
-    </div>
-  </div>
-</div>
+    </div> */}
+  {/* </div> */}
+{/* </div> */}
 
         </div>
 
@@ -988,7 +988,7 @@ const handlePaymentConfirmations = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center mb-8">
             <div className="flex items-center mb-4 md:mt-10">
-              <h1 className="text-2xl font-bold text-white ">Welcome back.</h1>
+              <h1 className="text-2xl font-bold text-white ">Welcome back, Donna.</h1>
               
             </div>
             <div className="flex flex-col sm:flex-row gap-4">

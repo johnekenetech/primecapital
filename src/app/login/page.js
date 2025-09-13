@@ -70,8 +70,8 @@ Last Updated: ${new Date().toLocaleDateString()}
     setError('');
   
     const validUsers = [
-      { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
-      { email: 'Cindykimberly0054@gmail.com', password: 'Cindy0054' },
+      // { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
+      { email: 'donnahambrick3@gmail.com', password: 'donnaham01' },
       { email: 'shandywealth@gmail.com', password: 'shandy@02' },
       
       // // { email: 'Realanthony@gmail.com', password: 'Anthony024' },
