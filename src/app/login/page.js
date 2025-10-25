@@ -70,14 +70,9 @@ Last Updated: ${new Date().toLocaleDateString()}
     setError('');
   
     const validUsers = [
-      // { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
-      { email: 'donnahambrick3@gmail.com', password: 'donnaham01' },
-      { email: 'shandywealth@gmail.com', password: 'shandy@02' },
-      
-      // // { email: 'Realanthony@gmail.com', password: 'Anthony024' },
-      // // { email: 'Prominentech@gmail.com', password: 'Prominen0235' },
-      // { email: 'Jacquelineandbill@gmail.com', password: ' ' },
-      // { email: 'Fredrickalvarez24@gmail.com', password: 'Fredrick234' }
+      { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
+      { email: 'testing@gmail.com', password: '12345' },
+     
     ];
   
     const userExists = validUsers.some(
