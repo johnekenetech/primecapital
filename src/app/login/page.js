@@ -71,7 +71,7 @@ Last Updated: ${new Date().toLocaleDateString()}
   
     const validUsers = [
       { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
-      { email: 'testing@gmail.com', password: '12345' },
+      { email: 'nathanielwealth@gmail.com', password: 'nath12345' },
      
     ];
   
