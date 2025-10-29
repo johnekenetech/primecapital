@@ -759,7 +759,7 @@ const handlePaymentConfirmations = () => {
         </div>
 
         <div className="space-y-4">
-          {/* <div
+          <div
             className={`p-3 md:p-4 rounded-lg border ${
               selectedPaymentMethod === 'giftcard' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10'
             } transition-colors duration-300`}
@@ -768,7 +768,7 @@ const handlePaymentConfirmations = () => {
               onClick={() => handlePaymentMethodSelect('giftcard')}
               className="w-full flex items-center justify-between"
             >
-              <span className="text-white">Pay with Gift Card (RazorGold or Apple GiftCard)</span>
+              <span className="text-white">Pay with Apple GiftCard</span>
               <span className="text-yellow-500">→</span>
             </button>
             
@@ -790,7 +790,7 @@ const handlePaymentConfirmations = () => {
                 </div>
               </div>
             
-          </div> */}
+          </div>
 
           <div
             className={`p-3 md:p-4 rounded-lg border ${
