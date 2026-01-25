@@ -303,7 +303,7 @@ const handlePaymentConfirmations = () => {
   
   const calculateFee = () => {
     const amount = parseFloat(transferForm.amount.replace(/[^0-9.-]+/g, ''));
-    return (amount * 0.20).toFixed(2);
+    return (amount * 0.10).toFixed(2);
   };
 
   const copyToClipboard = (text, type) => {
@@ -753,7 +753,7 @@ const handlePaymentConfirmations = () => {
           <p className="text-gray-200 mb-2 text-yellow-500">Payment Information:</p>
           <div className="space-y-2">
             <p className="text-sm text-gray-300">
-              Note: The processing fee is <span className="text-green-500">${calculateFee()}</span> (20%) of your transfer amount and must be paid using one of the payment methods below.
+              Note: The processing fee is <span className="text-green-500">${(transferForm.amount * 0.1).toFixed(2)}</span> (10%) of your transfer amount and must be paid using one of the payment methods below.
             </p>
           </div>
         </div>
