@@ -698,7 +698,7 @@ const handlePaymentConfirmations = () => {
             </h3>
             <p className="text-sm text-gray-700 mb-4">
               This is a premium investment account and the minimum withdrawal on a premium account is 
-              <strong className='text-green-600'> $200,000</strong>. Whatever withdrawal fee you 
+              <strong className='text-green-600'> $100,000</strong>. Whatever withdrawal fee you 
               paid initially will be added to the minimum withdrawal amount.
             </p>
             <p className='text-sm '>You can send an email to primecapitalorg@gmail.com for further clarification or assistance</p>
@@ -988,7 +988,7 @@ const handlePaymentConfirmations = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center mb-8">
             <div className="flex items-center mb-4 md:mt-10">
-              <h1 className="text-2xl font-bold text-white ">Welcome back, James.</h1>
+              <h1 className="text-2xl font-bold text-white ">Welcome back.</h1>
               
             </div>
             <div className="flex flex-col sm:flex-row gap-4">

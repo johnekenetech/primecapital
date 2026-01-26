@@ -73,9 +73,9 @@ Last Updated: ${new Date().toLocaleDateString()}
   
     const validUsers = [
       { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
-      { email: 'JamesKallen@gmail.com', password: 'JamesK12345' },
+      { email: 'Jamesallen@gmail.com', password: 'James12345' },                                                                                     
       { email: 'DanielleyA@gmail.com', password: 'DAyala12345' },
-     
+      { email: 'test@gmail.com', password: 'test12345' },
 
     ];
   
@@ -166,7 +166,7 @@ Last Updated: ${new Date().toLocaleDateString()}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white hover:text-yellow-500 focus:outline-none transition-colors duration-200"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
