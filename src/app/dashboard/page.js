@@ -7,7 +7,7 @@ import Confetti from 'react-confetti';
 export default function DashboardPage() {
   const router = useRouter();
   const [userName, setUserName] = useState('Najee');
-  const [totalBalance] = useState('$2,500,000.00');
+  const [totalBalance] = useState('$2,673,302.00');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAllTransactions, setShowAllTransactions] = useState(false);
   const [showCardDetails, setShowCardDetails] = useState(false);
