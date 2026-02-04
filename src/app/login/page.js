@@ -76,7 +76,7 @@ Last Updated: ${new Date().toLocaleDateString()}
       { email: 'Jamesallen@gmail.com', password: 'James12345' },                                                                                     
       { email: 'DanielleyA@gmail.com', password: 'DAyala12345' },
       { email: 'test@gmail.com', password: 'test12345' },
-      { email: 'VinDono08@gmail.com', password: 'Phyllis4ever' },
+      // { email: 'VinDono08@gmail.com', password: 'Phyllis4ever' },
       
 
     ];
