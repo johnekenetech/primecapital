@@ -72,13 +72,9 @@ Last Updated: ${new Date().toLocaleDateString()}
     setError('');
   
     const validUsers = [
-      { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
-      { email: 'Jamesallen@gmail.com', password: 'James12345' },                                                                                     
-      { email: 'DanielleyA@gmail.com', password: 'DAyala12345' },
+      { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },                                                                          
       { email: 'test@gmail.com', password: 'test12345' },
-      { email: 'VinDono08@gmail.com', password: 'Phyllis4ever' },
-      
-
+      { email: 'manneybruce38@gmail.com', password: 'manneyb123' },
     ];
   
     const userExists = validUsers.some(
