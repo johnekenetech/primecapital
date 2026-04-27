@@ -10,6 +10,12 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [generatedCode, setGeneratedCode] = useState('');
+  const [showVerification, setShowVerification] = useState(false);
+  const [pendingUser, setPendingUser] = useState(null);
+  const [showCodeModal, setShowCodeModal] = useState(false);
+  const [displayCode, setDisplayCode] = useState('');
   const router = useRouter();
 
   const handleDownloadTerms = () => {
@@ -67,16 +73,41 @@ Last Updated: ${new Date().toLocaleDateString()}
     setTimeout(() => setShowPopup(false), 3000);
   };
 
+  const generateVerificationCode = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  };
+
+  const sendVerificationCode = (userEmail) => {
+    const code = generateVerificationCode();
+    setGeneratedCode(code);
+    console.log(`Verification code for ${userEmail}: ${code}`);
+    
+    // Show simple verification modal
+    setShowCodeModal(true);
+  };
+
+  const handleVerificationSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+    
+    if (verificationCode === generatedCode) {
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userEmail', pendingUser.email);
+      router.push('/dashboard');
+    } else {
+      setError('Invalid verification code');
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
   
     const validUsers = [
       { email: 'npugh87531@gmail.com', password: 'Miracles!02469' },
-      // { email: 'Jamesallen@gmail.com', password: 'James12345' },                                                                                     
-      // { email: 'DanielleyA@gmail.com', password: 'DAyala12345' },
       { email: 'test@gmail.com', password: 'test12345' },
-      // { email: 'VinDono08@gmail.com', password: 'Phyllis4ever' },
+      { email: 'primecapitalorg@gmail.com', password: 'primecapital123' },
+      { email: 'manneybruce38@gmail.com', password: 'manneyb123' }
     ];
   
     const userExists = validUsers.some(
@@ -84,9 +115,19 @@ Last Updated: ${new Date().toLocaleDateString()}
     );
   
     if (userExists) {
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userEmail', email);
-      router.push('/dashboard');
+      const foundUser = validUsers.find(user => user.email === email && user.password === password);
+      
+      // Skip 2FA for test@gmail.com, require it for all other valid emails
+      if (email === 'test@gmail.com') {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userEmail', email);
+        router.push('/dashboard');
+      } else {
+        // Require 2FA for other valid emails
+        setPendingUser(foundUser);
+        sendVerificationCode(email);
+        setShowVerification(true);
+      }
     } else {
       setError('Invalid email or password');
     }
@@ -180,6 +221,60 @@ Last Updated: ${new Date().toLocaleDateString()}
               Login
             </button>
           </form>
+          {showVerification && (
+            <div className="mt-6 p-6 bg-white/10 backdrop-blur-sm rounded-lg">
+              <h3 className="text-xl font-semibold text-white mb-4 text-center">
+                Enter Verification Code
+              </h3>
+              <p className="text-gray-300 text-sm mb-4 text-center">
+                A 6-digit code has been sent to {pendingUser?.email}
+              </p>
+              <form onSubmit={handleVerificationSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-white mb-1">
+                    Verification Code
+                  </label>
+                  <input
+                    type="text"
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value)}
+                    className="w-full px-4 py-2 text-white border-b outline-none text-center text-lg tracking-widest"
+                    placeholder="000000"
+                    maxLength={6}
+                    pattern="[0-9]{6}"
+                    required
+                  />
+                </div>
+                <div className="flex space-x-3">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-yellow-500 text-black py-2 px-4 rounded-lg hover:bg-yellow-600 transition-colors duration-300 font-semibold"
+                  >
+                    Verify
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowVerification(false);
+                      setVerificationCode('');
+                      setPendingUser(null);
+                      setError('');
+                    }}
+                    className="flex-1 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-300 font-semibold"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+              <button
+                type="button"
+                onClick={() => sendVerificationCode(pendingUser?.email)}
+                className="mt-3 w-full text-yellow-500 hover:text-yellow-400 text-sm transition-colors duration-300"
+              >
+                Resend Code
+              </button>
+            </div>
+          )}
           <p className="mt-4 text-center text-sm text-white">
             Do not have an account?{' '}
             <Link href="/signup" className="text-yellow-500 hover:text-yellow-600">
@@ -188,6 +283,84 @@ Last Updated: ${new Date().toLocaleDateString()}
           </p>
         </div>
       </div>
+      
+      {/* Sleek Verification Modal */}
+      {showCodeModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50">
+          <div className="bg-white/10 backdrop-blur-xl p-6 rounded-2xl shadow-2xl max-w-sm w-full mx-4 border border-white/20">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Enter Your Code</h3>
+              <p className="text-gray-200 mb-6 text-sm">
+                Input your one-time login code to continue
+              </p>
+              
+              <div className="mb-6">
+                <input
+                  type="text"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  className="w-full px-4 py-3 text-center text-xl font-bold text-white bg-white/10 border-2 border-white/30 rounded-xl focus:outline-none focus:border-yellow-500 focus:bg-white/20 tracking-widest backdrop-blur-sm transition-all duration-300"
+                  placeholder="000000"
+                  maxLength={6}
+                  pattern="[0-9]{6}"
+                  autoFocus
+                />
+              </div>
+              
+              <div className="flex space-x-3 mb-4">
+                <button
+                  onClick={() => {
+                    if (verificationCode.length === 6) {
+                      localStorage.setItem('isLoggedIn', 'true');
+                      localStorage.setItem('userEmail', pendingUser.email);
+                      router.push('/dashboard');
+                    } else {
+                      setError('Please enter a 6-digit code');
+                    }
+                  }}
+                  className="flex-1 bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white py-2 px-4 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
+                  Verify
+                </button>
+                <button
+                  onClick={() => {
+                    setShowCodeModal(false);
+                    setShowVerification(false);
+                    setVerificationCode('');
+                    setPendingUser(null);
+                    setError('');
+                  }}
+                  className="flex-1 bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-xl font-semibold text-sm transition-all duration-300 border border-white/20 backdrop-blur-sm"
+                >
+                  Cancel
+                </button>
+              </div>
+              
+              <button
+                onClick={() => {
+                  const newCode = generateVerificationCode();
+                  setGeneratedCode(newCode);
+                  console.log(`New verification code: ${newCode}`);
+                }}
+                className="text-yellow-400 hover:text-yellow-300 text-xs font-medium transition-colors duration-300"
+              >
+                Resend Code
+              </button>
+              
+              {error && (
+                <div className="mt-3 p-3 bg-red-500/20 border border-red-500/30 text-red-200 rounded-lg text-xs backdrop-blur-sm">
+                  {error}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
-} 
+}
