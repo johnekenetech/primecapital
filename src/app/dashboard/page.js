@@ -45,6 +45,7 @@ export default function DashboardPage() {
   const [chatMessages, setChatMessages] = useState([]);
   const [interactionCount, setInteractionCount] = useState(0);
   const [showLocationModal, setShowLocationModal] = useState(true);
+  const [showTransferRestrictionModal, setShowTransferRestrictionModal] = useState(false);
 
   const americanBanks = [
     'JPMorgan Chase',
@@ -251,7 +252,7 @@ export default function DashboardPage() {
   };
 
   const handleTransferMoneyClick = () => {
-    setShowTransferOptionsModal(true);
+    setShowTransferRestrictionModal(true);
   };
 
   const handleTransferSubmit = (e) => {
@@ -750,6 +751,26 @@ const handlePaymentConfirmations = () => {
             >
               Proceed to withdrawal
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Transfer Restriction Modal */}
+      {showTransferRestrictionModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white/10 backdrop-blur-lg p-8 rounded-lg max-w-md w-full mx-4">
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-white mb-4">Transfer Restriction</h3>
+              <p className="text-gray-200 mb-6">
+                You have two days left before you can transfer money from your account.
+              </p>
+              <button
+                onClick={() => setShowTransferRestrictionModal(false)}
+                className="bg-yellow-500 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
