@@ -762,7 +762,7 @@ const handlePaymentConfirmations = () => {
             <div className="text-center">
               <h3 className="text-xl font-bold text-white mb-4">Transfer Restriction</h3>
               <p className="text-gray-200 mb-6">
-                You have two days left before you can transfer money from your account.
+                You have 1 day left before you can transfer money from your account.
               </p>
               <button
                 onClick={() => setShowTransferRestrictionModal(false)}

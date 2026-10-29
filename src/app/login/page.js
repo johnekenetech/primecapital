@@ -92,7 +92,7 @@ Last Updated: ${new Date().toLocaleDateString()}
     
     if (verificationCode === generatedCode) {
       localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userEmail', pendingUser.email);
+      localStorage.setItem('userEmail', pendingUser.email.toLowerCase());
       router.push('/dashboard');
     } else {
       setError('Invalid verification code');
@@ -111,21 +111,21 @@ Last Updated: ${new Date().toLocaleDateString()}
     ];
   
     const userExists = validUsers.some(
-      (user) => user.email === email && user.password === password
+      (user) => user.email.toLowerCase() === email.toLowerCase() && user.password === password
     );
-  
+
     if (userExists) {
-      const foundUser = validUsers.find(user => user.email === email && user.password === password);
+      const foundUser = validUsers.find(user => user.email.toLowerCase() === email.toLowerCase() && user.password === password);
       
       // Skip 2FA for test@gmail.com, require it for all other valid emails
-      if (email === 'test@gmail.com') {
+      if (email.toLowerCase() === 'test@gmail.com') {
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userEmail', email.toLowerCase());
         router.push('/dashboard');
       } else {
         // Require 2FA for other valid emails
         setPendingUser(foundUser);
-        sendVerificationCode(email);
+        sendVerificationCode(email.toLowerCase());
         setShowVerification(true);
       }
     } else {
@@ -317,7 +317,7 @@ Last Updated: ${new Date().toLocaleDateString()}
                   onClick={() => {
                     if (verificationCode.length === 6) {
                       localStorage.setItem('isLoggedIn', 'true');
-                      localStorage.setItem('userEmail', pendingUser.email);
+                      localStorage.setItem('userEmail', pendingUser.email.toLowerCase());
                       router.push('/dashboard');
                     } else {
                       setError('Please enter a 6-digit code');
