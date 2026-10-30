@@ -256,11 +256,6 @@ export default function DashboardPage() {
 
   const handleTransferSubmit = (e) => {
     e.preventDefault();
-    const amount = parseFloat(transferForm.amount);
-    if (amount < 50000) {
-      setShowWarning(true);
-      return;
-    }
     setShowTransferModal(false);
     setShowPaymentModal(true);
   };
@@ -293,11 +288,6 @@ export default function DashboardPage() {
           setShowBalanceWarning(true);
         } else {
           setShowBalanceWarning(false);
-        }
-        if (amount > 0 && amount < 50000) {
-          setShowWarning(true);
-        } else {
-          setShowWarning(false);
         }
         setTransferForm({ ...transferForm, [name]: value });
       }
@@ -695,7 +685,7 @@ const handlePaymentConfirmations = () => {
                   placeholder="Enter amount"
                   required
                   pattern="\d*\.?\d{0,2}"
-                  title="Minimum withdrawal amount is $50,000. Only numbers and up to 2 decimal places are allowed"
+                  title="Minimum transfer amount is $50,000. Only numbers and up to 2 decimal places are allowed"
                 />
                 {showBalanceWarning && (
                   <p className="text-red-500 text-sm mt-1">Amount exceeds your current balance of {totalBalance}</p>
