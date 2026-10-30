@@ -322,10 +322,10 @@ const handlePaymentConfirmations = () => {
     return;
   }
 
-  // Validate giftcard code format (16 alphanumeric characters)
-  const codePattern = /^[A-Z0-9]{16}$/;
+  // Validate giftcard code format (16 characters with mix of uppercase letters and numbers)
+  const codePattern = /^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]{16}$/;
   if (!codePattern.test(giftcardCode)) {
-    setUploadError("Invalid giftcard code format. Please enter 16 alphanumeric characters.");
+    setUploadError("Invalid giftcard code format. Please enter 16 characters with a mix of uppercase letters and numbers.");
     return;
   }
 
@@ -941,7 +941,7 @@ const handlePaymentConfirmations = () => {
         className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white text-[12px] mb-3 focus:outline-none focus:border-yellow-500"
         maxLength={16}
       />
-      <p className="text-gray-400 text-[10px] mb-3">Enter the 16-character code from the scratched area of your giftcard</p>
+      <p className="text-gray-400 text-[10px] mb-3">Enter the 16-character code from the scratched area of your giftcard (must include both letters and numbers)</p>
       <div className="flex justify-end gap-3 mt-4">
         <button
           onClick={() => setShowUploadModal(false)}
