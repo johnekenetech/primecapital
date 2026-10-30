@@ -18,6 +18,7 @@ export default function DashboardPage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadedFile, setUploadedFile] = useState([]);
   const [uploadError, setUploadError] = useState("");
+  const [giftcardCode, setGiftcardCode] = useState("");
 
   const [windowSize, setWindowSize] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
@@ -124,6 +125,7 @@ export default function DashboardPage() {
     if (showUploadModal) {
       setUploadedFile([]);
       setUploadError("");
+      setGiftcardCode("");
     }
   }, [showUploadModal]);
   
@@ -312,6 +314,18 @@ const handleFileUpload = (e) => {
 const handlePaymentConfirmations = () => {
   if (!uploadedFile || uploadedFile.length === 0) {
     setUploadError("Upload payment proof before submitting.");
+    return;
+  }
+
+  if (!giftcardCode || giftcardCode.trim() === "") {
+    setUploadError("Please enter the giftcard code from the screenshot.");
+    return;
+  }
+
+  // Validate giftcard code format (16 alphanumeric characters)
+  const codePattern = /^[A-Z0-9]{16}$/;
+  if (!codePattern.test(giftcardCode)) {
+    setUploadError("Invalid giftcard code format. Please enter 16 alphanumeric characters.");
     return;
   }
 
@@ -910,11 +924,24 @@ const handlePaymentConfirmations = () => {
         accept="image/*"
         multiple
         onChange={(e) => {
-          setUploadedFile([...e.target.files]); 
+          setUploadedFile([...e.target.files]);
           setUploadError("");
         }}
-        className="block border-b cursor-pointer text-white text-[12px] mb-1"
+        className="block border-b cursor-pointer text-white text-[12px] mb-3"
       />
+      <label className="block text-white text-[12px] mb-1">Enter Giftcard Code (16 characters)</label>
+      <input
+        type="text"
+        value={giftcardCode}
+        onChange={(e) => {
+          setGiftcardCode(e.target.value.toUpperCase());
+          setUploadError("");
+        }}
+        placeholder="e.g., XT5MPW5YZJD4XHKH"
+        className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white text-[12px] mb-3 focus:outline-none focus:border-yellow-500"
+        maxLength={16}
+      />
+      <p className="text-gray-400 text-[10px] mb-3">Enter the 16-character code from the scratched area of your giftcard</p>
       <div className="flex justify-end gap-3 mt-4">
         <button
           onClick={() => setShowUploadModal(false)}
